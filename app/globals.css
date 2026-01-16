@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-primary: #1cb591;
+  --color-primary-dark: #158c70;
+  
+  --color-background-light: #f6f8f7;
+  --color-background-dark: #12201d;
+  
+  --color-surface-light: #ffffff;
+  --color-surface-dark: #1a2c28;
+  
+  --color-text-main: #0e1a18;
+  --color-text-secondary: #519484;
+  
+  --color-border-light: #d1e6e1;
+  --color-border-dark: #2a403d;
+
+  --font-display: "Public Sans", "Noto Sans Thai", sans-serif;
+  --font-body: "Public Sans", "Noto Sans Thai", sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Custom Utilities mapping to the design tokens for easier usage if needed, 
+   but Tailwind v4 @theme handles most classes automatically like bg-primary */
+
+body {
+  font-family: var(--font-body);
+}
+
+/* Material Symbols */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}

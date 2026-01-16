@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+<html class="light" lang="th">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>ยื่นเรื่องร้องเรียน - กลุ่มงานคุ้มครองผู้บริโภคฯ สมุทรปราการ</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;family=Noto+Sans+Thai:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Theme Configuration -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1cb591",
+                        "primary-dark": "#158c70",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#12201d",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2c28",
+                        "text-main": "#0e1a18",
+                        "text-secondary": "#519484",
+                        "border-light": "#d1e6e1",
+                        "border-dark": "#2a403d",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "Noto Sans Thai", "sans-serif"],
+                        "body": ["Public Sans", "Noto Sans Thai", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Public Sans', 'Noto Sans Thai', sans-serif;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-text-main dark:text-white transition-colors duration-200">
+    <div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+        <!-- Header -->
+        <header
+            class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark px-4 lg:px-10 py-3 sticky top-0 z-50">
+            <div class="flex items-center gap-4">
+                <div class="size-10 flex items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <span class="material-symbols-outlined text-[28px]">health_and_safety</span>
+                </div>
+                <div class="flex flex-col">
+                    <h2
+                        class="text-text-main dark:text-white text-base lg:text-lg font-bold leading-tight tracking-[-0.015em]">
+                        กลุ่มงานคุ้มครองผู้บริโภคฯ</h2>
+                    <span
+                        class="text-xs text-text-secondary dark:text-gray-400 font-medium">สำนักงานสาธารณสุขจังหวัดสมุทรปราการ</span>
+                </div>
+            </div>
+            <!-- Desktop Nav -->
+            <div class="hidden lg:flex flex-1 justify-end gap-8 items-center">
+                <nav class="flex items-center gap-6">
+                    <a class="text-text-main dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal"
+                        href="#">หน้าแรก</a>
+                    <a class="text-text-main dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal"
+                        href="#">ข่าวประชาสัมพันธ์</a>
+                    <a class="text-primary dark:text-primary text-sm font-bold leading-normal"
+                        href="#">แบบฟอร์มแจ้งเรื่องร้องเรียน</a>
+                    <a class="text-text-main dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal"
+                        href="#">ติดต่อเรา</a>
+                </nav>
+                <button
+                    class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary hover:bg-primary-dark transition-colors text-white text-sm font-bold leading-normal tracking-[0.015em] shadow-sm">
+                    <span class="truncate">เข้าสู่ระบบ</span>
+                </button>
+            </div>
+            <!-- Mobile Menu Icon -->
+            <div class="lg:hidden">
+                <button class="text-text-main dark:text-white p-2">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+            </div>
+        </header>
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
+            <div class="w-full max-w-[960px] flex flex-col gap-6">
+                <!-- Page Heading -->
+                <div class="flex flex-col gap-2">
+                    <div class="flex items-center gap-2 text-sm font-medium text-text-secondary mb-2">
+                        <a class="hover:underline" href="#">หน้าแรก</a>
+                        <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+                        <span class="text-primary">ยื่นเรื่องร้องเรียน</span>
+                    </div>
+                    <h1
+                        class="text-3xl lg:text-4xl font-black leading-tight tracking-[-0.033em] text-text-main dark:text-white">
+                        ยื่นเรื่องร้องเรียน</h1>
+                    <p class="text-text-secondary dark:text-gray-400 text-base font-normal leading-normal max-w-2xl">
+                        โปรดกรอกข้อมูลให้ครบถ้วนเพื่อความรวดเร็วในการดำเนินการตรวจสอบ
+                        ข้อมูลของท่านจะถูกเก็บเป็นความลับตามนโยบายคุ้มครองข้อมูลส่วนบุคคล (PDPA)
+                    </p>
+                </div>
+                <!-- Instruction Panel -->
+                <div
+                    class="rounded-lg border border-primary/20 bg-primary/5 dark:bg-primary/10 p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="flex gap-4">
+                        <div
+                            class="flex-shrink-0 size-10 rounded-full bg-primary/20 text-primary flex items-center justify-center">
+                            <span class="material-symbols-outlined">lightbulb</span>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <h3 class="text-base font-bold text-text-main dark:text-white">คำแนะนำก่อนร้องเรียน</h3>
+                            <p class="text-sm text-text-secondary dark:text-gray-300">
+                                กรุณาเตรียมเอกสารหลักฐาน เช่น ใบเสร็จรับเงิน รูปถ่ายผลิตภัณฑ์ หรือเอกสารทางการแพทย์
+                                เพื่อประกอบการพิจารณา
+                            </p>
+                        </div>
+                    </div>
+                    <a class="whitespace-nowrap text-sm font-bold text-primary hover:text-primary-dark flex items-center gap-1 group"
+                        href="#">
+                        อ่านขั้นตอนการร้องเรียน
+                        <span
+                            class="material-symbols-outlined text-[18px] transition-transform group-hover:translate-x-1">arrow_forward</span>
+                    </a>
+                </div>
+                <!-- Form Container -->
+                <form
+                    class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-border-light dark:border-border-dark overflow-hidden">
+                    <!-- Section 1: Complainant Info -->
+                    <div class="p-6 lg:p-8 border-b border-border-light dark:border-border-dark">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div
+                                class="size-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">
+                                1</div>
+                            <h2 class="text-xl font-bold text-text-main dark:text-white">ข้อมูลผู้ร้องเรียน</h2>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <label class="flex flex-col gap-2">
+                                <span class="text-sm font-medium text-text-main dark:text-gray-200">ชื่อ - นามสกุล <span
+                                        class="text-red-500">*</span></span>
+                                <input
+                                    class="w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white focus:ring-primary focus:border-primary h-12 px-4 placeholder:text-gray-400"
+                                    placeholder="ระบุชื่อและนามสกุลจริง" type="text" />
+                            </label>
+                            <label class="flex flex-col gap-2">
+                                <span class="text-sm font-medium text-text-main dark:text-gray-200">เลขบัตรประชาชน <span
+                                        class="text-red-500">*</span></span>
+                                <input
+                                    class="w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white focus:ring-primary focus:border-primary h-12 px-4 placeholder:text-gray-400"
+                                    maxlength="13" placeholder="ระบุเลขบัตรประชาชน 13 หลัก" type="text" />
+                            </label>
+                            <label class="flex flex-col gap-2">
+                                <span class="text-sm font-medium text-text-main dark:text-gray-200">เบอร์โทรศัพท์ติดต่อ
+                                    <span class="text-red-500">*</span></span>
+                                <input
+                                    class="w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white focus:ring-primary focus:border-primary h-12 px-4 placeholder:text-gray-400"
+                                    placeholder="08x-xxxxxxx" type="tel" />
+                            </label>
+                            <label class="flex flex-col gap-2">
+                                <span class="text-sm font-medium text-text-main dark:text-gray-200">อีเมล (ถ้ามี)</span>
+                                <input
+                                    class="w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white focus:ring-primary focus:border-primary h-12 px-4 placeholder:text-gray-400"
+                                    placeholder="example@email.com" type="email" />
+                            </label>
+                            <label class="flex flex-col gap-2 md:col-span-2">
+                                <span
+                                    class="text-sm font-medium text-text-main dark:text-gray-200">ที่อยู่ปัจจุบัน</span>
+                                <textarea
+                                    class="w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white focus:ring-primary focus:border-primary p-4 resize-none placeholder:text-gray-400"
+                                    placeholder="บ้านเลขที่ หมู่ ซอย ถนน ตำบล อำเภอ จังหวัด รหัสไปรษณีย์"
+                                    rows="3"></textarea>
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Section 2: Target Info -->
+                    <div class="p-6 lg:p-8 border-b border-border-light dark:border-border-dark">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div
+                                class="size-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">
+                                2</div>
+                            <h2 class="text-xl font-bold text-text-main dark:text-white">ข้อมูลคู่กรณี / ผลิตภัณฑ์</h2>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <label class="flex flex-col gap-2">
+                                <span class="text-sm font-medium text-text-main dark:text-gray-200">ชื่อผลิตภัณฑ์ /
+                                    บริการ <span class="text-red-500">*</span></span>
+                                <input
+                                    class="w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white focus:ring-primary focus:border-primary h-12 px-4 placeholder:text-gray-400"
+                                    placeholder="เช่น ยาลดความอ้วนยี่ห้อ..." type="text" />
+                            </label>
+                            <label class="flex flex-col gap-2">
+                                <span class="text-sm font-medium text-text-main dark:text-gray-200">ชื่อร้านค้า /
+                                    สถานที่จำหน่าย</span>
+                                <input
+                                    class="w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white focus:ring-primary focus:border-primary h-12 px-4 placeholder:text-gray-400"
+                                    placeholder="เช่น ร้านขายยาหน้าปากซอย..." type="text" />
+                            </label>
+                            <label class="flex flex-col gap-2 md:col-span-2">
+                                <span class="text-sm font-medium text-text-main dark:text-gray-200">สถานที่ตั้ง /
+                                    ช่องทางออนไลน์</span>
+                                <input
+                                    class="w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white focus:ring-primary focus:border-primary h-12 px-4 placeholder:text-gray-400"
+                                    placeholder="ระบุที่ตั้งร้าน หรือ ลิงก์ Facebook/Website" type="text" />
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Section 3: Details -->
+                    <div class="p-6 lg:p-8 border-b border-border-light dark:border-border-dark">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div
+                                class="size-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">
+                                3</div>
+                            <h2 class="text-xl font-bold text-text-main dark:text-white">รายละเอียดเหตุการณ์</h2>
+                        </div>
+                        <div class="flex flex-col gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <label class="flex flex-col gap-2">
+                                    <span
+                                        class="text-sm font-medium text-text-main dark:text-gray-200">วันที่เกิดเหตุ</span>
+                                    <input
+                                        class="w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white focus:ring-primary focus:border-primary h-12 px-4"
+                                        type="date" />
+                                </label>
+                                <label class="flex flex-col gap-2">
+                                    <span
+                                        class="text-sm font-medium text-text-main dark:text-gray-200">ความเสียหายเบื้องต้น</span>
+                                    <input
+                                        class="w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white focus:ring-primary focus:border-primary h-12 px-4"
+                                        placeholder="เช่น 500 บาท หรือ อาการแพ้ทางผิวหนัง" type="text" />
+                                </label>
+                            </div>
+                            <label class="flex flex-col gap-2">
+                                <span
+                                    class="text-sm font-medium text-text-main dark:text-gray-200">รายละเอียดเรื่องร้องเรียน
+                                    <span class="text-red-500">*</span></span>
+                                <textarea
+                                    class="w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white focus:ring-primary focus:border-primary p-4 resize-none placeholder:text-gray-400"
+                                    placeholder="อธิบายเหตุการณ์ที่เกิดขึ้นโดยละเอียด..." rows="6"></textarea>
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Section 4: Evidence Upload -->
+                    <div class="p-6 lg:p-8">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div
+                                class="size-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">
+                                4</div>
+                            <h2 class="text-xl font-bold text-text-main dark:text-white">เอกสารหลักฐาน</h2>
+                        </div>
+                        <div
+                            class="border-2 border-dashed border-border-light dark:border-border-dark rounded-xl p-8 flex flex-col items-center justify-center text-center bg-background-light/50 dark:bg-background-dark/50 hover:bg-background-light dark:hover:bg-background-dark transition-colors cursor-pointer group">
+                            <div
+                                class="size-16 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <span class="material-symbols-outlined text-[32px]">cloud_upload</span>
+                            </div>
+                            <p class="text-text-main dark:text-white font-bold text-lg mb-1">คลิกเพื่ออัปโหลด หรือ
+                                ลากไฟล์มาวางที่นี่</p>
+                            <p class="text-text-secondary dark:text-gray-400 text-sm mb-4">รองรับไฟล์ JPG, PNG, PDF
+                                ขนาดไม่เกิน 5MB (สูงสุด 5 ไฟล์)</p>
+                            <button
+                                class="px-4 py-2 rounded-lg bg-white dark:bg-surface-dark border border-border-light dark:border-border-dark text-text-main dark:text-white font-medium text-sm shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                type="button">
+                                เลือกไฟล์จากเครื่อง
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Action Footer -->
+                    <div
+                        class="bg-gray-50 dark:bg-[#1a2c28] p-6 lg:p-8 border-t border-border-light dark:border-border-dark flex flex-col md:flex-row items-center justify-between gap-6">
+                        <label class="flex items-start gap-3 cursor-pointer">
+                            <div class="relative flex items-center mt-0.5">
+                                <input
+                                    class="peer size-5 cursor-pointer appearance-none rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-surface-dark checked:border-primary checked:bg-primary focus:ring-0"
+                                    type="checkbox" />
+                                <span
+                                    class="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 peer-checked:opacity-100">
+                                    <span class="material-symbols-outlined text-[16px]">check</span>
+                                </span>
+                            </div>
+                            <span class="text-sm text-text-secondary dark:text-gray-400 select-none">
+                                ข้าพเจ้ายอมรับ <a class="text-primary font-bold hover:underline"
+                                    href="#">นโยบายความเป็นส่วนตัว</a> และยืนยันว่าข้อมูลข้างต้นเป็นความจริง
+                            </span>
+                        </label>
+                        <div class="flex gap-4 w-full md:w-auto">
+                            <button
+                                class="flex-1 md:flex-none px-6 py-3 rounded-lg border border-border-light dark:border-border-dark bg-white dark:bg-transparent text-text-main dark:text-white font-bold text-sm hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
+                                type="button">
+                                ยกเลิก
+                            </button>
+                            <button
+                                class="flex-1 md:flex-none px-8 py-3 rounded-lg bg-primary hover:bg-primary-dark text-white font-bold text-sm shadow-md transition-all hover:shadow-lg flex items-center justify-center gap-2"
+                                type="submit">
+                                <span>ยืนยันการร้องเรียน</span>
+                                <span class="material-symbols-outlined text-[18px]">send</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </main>
+        <!-- Footer -->
+        <footer
+            class="bg-surface-light dark:bg-surface-dark border-t border-border-light dark:border-border-dark py-10 px-4 mt-auto">
+            <div
+                class="layout-container max-w-[960px] mx-auto flex flex-col md:flex-row justify-between items-start gap-8">
+                <div class="flex flex-col gap-4 max-w-sm">
+                    <div class="flex items-center gap-3">
+                        <div class="size-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                            <span class="material-symbols-outlined text-[20px]">health_and_safety</span>
+                        </div>
+                        <h2 class="text-text-main dark:text-white text-lg font-bold">กลุ่มงานคุ้มครองผู้บริโภคฯ</h2>
+                    </div>
+                    <p class="text-text-secondary dark:text-gray-400 text-sm leading-relaxed">
+                        สำนักงานสาธารณสุขจังหวัดสมุทรปราการ<br />
+                        1029 หมู่ 2 ถนนท้ายบ้าน ตำบลปากน้ำ อำเภอเมือง จังหวัดสมุทรปราการ 10270
+                    </p>
+                </div>
+                <div class="flex flex-wrap gap-8 md:gap-16">
+                    <div class="flex flex-col gap-3">
+                        <h4 class="text-text-main dark:text-white font-bold text-sm">เมนูลัด</h4>
+                        <a class="text-text-secondary dark:text-gray-400 hover:text-primary text-sm"
+                            href="#">หน้าแรก</a>
+                        <a class="text-text-secondary dark:text-gray-400 hover:text-primary text-sm" href="#">ตรวจสอบเลข
+                            อย.</a>
+                        <a class="text-text-secondary dark:text-gray-400 hover:text-primary text-sm"
+                            href="#">บทความสุขภาพ</a>
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <h4 class="text-text-main dark:text-white font-bold text-sm">ติดต่อเรา</h4>
+                        <a class="text-text-secondary dark:text-gray-400 hover:text-primary text-sm flex items-center gap-2"
+                            href="#">
+                            <span class="material-symbols-outlined text-[16px]">call</span>
+                            02-384-0094
+                        </a>
+                        <a class="text-text-secondary dark:text-gray-400 hover:text-primary text-sm flex items-center gap-2"
+                            href="#">
+                            <span class="material-symbols-outlined text-[16px]">mail</span>
+                            consumer.sp@gmail.com
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="max-w-[960px] mx-auto pt-8 mt-8 border-t border-border-light dark:border-border-dark text-center">
+                <p class="text-text-secondary dark:text-gray-500 text-xs">© 2024 Samut Prakan Provincial Public Health
+                    Office. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>
