@@ -1,5 +1,4 @@
 import { query } from '@/lib/db';
-import { updateComplaintStatus } from '@/actions/admin-actions';
 import { format } from 'date-fns';
 import { th } from 'date-fns/locale';
 import Link from 'next/link';
@@ -11,6 +10,7 @@ import InvestigationReportButton from '@/components/admin/InvestigationReportBut
 import ComplaintPrintButton from '@/components/admin/ComplaintPrintButton';
 
 async function getComplaint(id: string) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const rows = await query('SELECT * FROM complaints WHERE id = ?', [id]) as any[];
     if (rows.length === 0) return null;
     return rows[0];
