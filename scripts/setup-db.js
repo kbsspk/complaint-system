@@ -72,6 +72,7 @@ async function setup() {
         investigation_details text DEFAULT NULL,
         response_letter_file text DEFAULT NULL,
         action_evidence_file text DEFAULT NULL,
+        is_safety_health_related tinyint(1) DEFAULT 0,
         PRIMARY KEY (id)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
     `);

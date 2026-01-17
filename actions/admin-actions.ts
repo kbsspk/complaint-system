@@ -101,7 +101,7 @@ export async function acceptComplaint(prevState: unknown, formData: FormData) {
                 is_safety_health_related = ?
         `;
         const params: (string | number | boolean | null)[] = [
-            complaint_number, received_date, original_doc_number, original_doc_date,
+            complaint_number, received_date || null, original_doc_number, original_doc_date || null,
             channel, type, district, JSON.stringify(related_acts), responsible_person_id || null,
             formData.get('is_safety_health_related') === 'true'
         ];
@@ -120,7 +120,7 @@ export async function acceptComplaint(prevState: unknown, formData: FormData) {
         return { success: true, message: 'รับเรื่องเรียบร้อยแล้ว' };
     } catch (error) {
         console.error('Accept error:', error);
-        return { success: false, message: 'Failed to accept complaint' };
+        return { success: false, message: `Failed to accept complaint: ${(error as Error).message}` };
     }
 }
 
