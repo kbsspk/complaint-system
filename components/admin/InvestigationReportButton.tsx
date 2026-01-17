@@ -23,8 +23,7 @@ export default function InvestigationReportButton({ complaint }: InvestigationRe
 
             {isOpen && (
                 <InvestigationReportModal
-                    complaintId={complaint.id}
-                    currentData={complaint}
+                    complaint={complaint}
                     onClose={() => setIsOpen(false)}
                     onSuccess={() => {
                         setIsOpen(false);

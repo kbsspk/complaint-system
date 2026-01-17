@@ -77,13 +77,7 @@ export default async function DashboardStatsPage(props: DashboardStatsPageProps)
     }
 
     // Constants for Generic Views
-    const DISTRICTS = [
-        'เมืองสมุทรปราการ', 'บางบ่อ', 'บางพลี',
-        'พระประแดง', 'พระสมุทรเจดีย์', 'บางเสาธง'
-    ];
 
-    // Channel is already mapped to Thai in backend, so keys are Thai.
-    const CHANNELS = ['ออนไลน์', 'โทรศัพท์', 'หนังสือราชการ', 'Walk-in'];
 
     return (
         <div className="p-8 max-w-7xl mx-auto space-y-6">
@@ -122,18 +116,8 @@ export default async function DashboardStatsPage(props: DashboardStatsPageProps)
                 <div className="w-full">
                     <Suspense fallback={<div className="h-[600px] w-full bg-gray-100 animate-pulse rounded-xl" />}>
                         <GenericStatsDashboardClient
-                            data={districtStats}
-                            dataKeys={DISTRICTS}
+                            districtStats={districtStats}
                             title="สถิติเรื่องร้องเรียนแยกตามอำเภอ"
-                            // Custom district colors
-                            colors={{
-                                'เมืองสมุทรปราการ': '#ef4444',
-                                'บางพลี': '#3b82f6',
-                                'บางบ่อ': '#f59e0b',
-                                'พระประแดง': '#10b981',
-                                'พระสมุทรเจดีย์': '#6366f1',
-                                'บางเสาธง': '#ec4899'
-                            }}
                         />
                     </Suspense>
                 </div>
@@ -143,15 +127,8 @@ export default async function DashboardStatsPage(props: DashboardStatsPageProps)
                 <div className="w-full">
                     <Suspense fallback={<div className="h-[600px] w-full bg-gray-100 animate-pulse rounded-xl" />}>
                         <GenericStatsDashboardClient
-                            data={channelStats}
-                            dataKeys={CHANNELS}
+                            channelStats={channelStats}
                             title="สถิติเรื่องร้องเรียนแยกตามช่องทาง"
-                            colors={{
-                                'ออนไลน์': '#3b82f6',
-                                'โทรศัพท์': '#f59e0b',
-                                'หนังสือราชการ': '#64748b',
-                                'Walk-in': '#10b981',
-                            }}
                         />
                     </Suspense>
                 </div>

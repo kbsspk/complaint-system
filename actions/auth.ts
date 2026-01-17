@@ -32,10 +32,19 @@ export async function login(prevState: unknown, formData: FormData) {
         }
 
         const user = rows[0];
+
+        if (!user.password_hash) {
+            return { message: 'เกิดข้อผิดพลาด: ไม่พบรหัสผ่าน' };
+        }
+
         const passwordMatch = await bcrypt.compare(password, user.password_hash);
 
         if (!passwordMatch) {
             return { message: 'ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง' };
+        }
+
+        if (user.role !== 'ADMIN' && user.role !== 'OFFICIAL') {
+            return { message: 'ไม่มีสิทธิ์เข้าใช้งานระบบ' };
         }
 
         await createSession(user.id, user.username, user.full_name, user.role);
