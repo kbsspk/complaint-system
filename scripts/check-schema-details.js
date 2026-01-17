@@ -12,12 +12,13 @@ async function checkSchema() {
     console.log('Connected to:', process.env.DB_HOST);
     try {
         const [rows] = await connection.query('DESCRIBE complaints');
-        const col = rows.find(r => r.Field === 'is_safety_health_related');
-        if (col) {
-            console.log('Column FOUND:', col);
-        } else {
-            console.log('Column NOT FOUND');
-        }
+        const fields = ['investigation_date', 'is_guilty', 'legal_action_status', 'response_doc_number', 'response_doc_date'];
+
+        console.log('--- Checking Investigation Columns ---');
+        fields.forEach(field => {
+            const found = rows.find(r => r.Field === field);
+            console.log(`${field}: ${found ? 'FOUND' : 'MISSING'}`);
+        });
     } catch (e) {
         console.error(e);
     } finally {

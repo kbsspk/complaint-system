@@ -385,18 +385,30 @@ export async function saveInvestigationResults(prevState: unknown, formData: For
     const responseLetterFile = formData.get('responseLetterFile') as File;
     const actionEvidenceFile = formData.get('actionEvidenceFile') as File;
 
-    let responseLetterPath = null;
-    let actionEvidencePath = null;
-
-    if (responseLetterFile && responseLetterFile.size > 0) {
-        responseLetterPath = await uploadFile(responseLetterFile);
-    }
-
-    if (actionEvidenceFile && actionEvidenceFile.size > 0) {
-        actionEvidencePath = await uploadFile(actionEvidenceFile);
-    }
-
     try {
+        let responseLetterPath = null;
+        let actionEvidencePath = null;
+
+        if (responseLetterFile && responseLetterFile.size > 0) {
+            try {
+                responseLetterPath = await uploadFile(responseLetterFile);
+            } catch (uploadError) {
+                console.error('Upload failed (responseLetter):', uploadError);
+                // On Vercel, this fails. We might want to continue without file or throw?
+                // Throwing to let user know upload failed.
+                throw new Error('Upload failed: File system is read-only (Vercel limitation). Please configure Vercel Blob.');
+            }
+        }
+
+        if (actionEvidenceFile && actionEvidenceFile.size > 0) {
+            try {
+                actionEvidencePath = await uploadFile(actionEvidenceFile);
+            } catch (uploadError) {
+                console.error('Upload failed (actionEvidence):', uploadError);
+                throw new Error('Upload failed: File system is read-only (Vercel limitation). Please configure Vercel Blob.');
+            }
+        }
+
         let updateSql = `
             UPDATE complaints SET
                 investigation_date = ?,
@@ -410,9 +422,9 @@ export async function saveInvestigationResults(prevState: unknown, formData: For
         const params: (string | number | boolean | null)[] = [
             investigationDate,
             isGuilty,
-            legalActionType || 'NONE', // Store the type directly
+            legalActionType || 'NONE',
             responseDocNumber || null,
-            responseDocDate || null,
+            responseDocDate || null, // Fix empty string date
             investigationDetails || null,
             statusUpdate
         ];
@@ -453,6 +465,7 @@ export async function saveInvestigationResults(prevState: unknown, formData: For
             }
         } catch (fineError) {
             console.error('Error saving fines:', fineError);
+            // Don't fail the whole request for fines error, but maybe warn?
         }
 
         revalidatePath('/admin/dashboard');
@@ -461,7 +474,7 @@ export async function saveInvestigationResults(prevState: unknown, formData: For
         return { success: true, message: 'บันทึกผลการตรวจสอบเรียบร้อยแล้ว' };
     } catch (error) {
         console.error('Save investigation error:', error);
-        return { success: false, message: 'Failed to save investigation results' };
+        return { success: false, message: `Failed to save investigation results: ${(error as Error).message}` };
     }
 }
 
