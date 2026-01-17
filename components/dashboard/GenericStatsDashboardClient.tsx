@@ -44,6 +44,28 @@ export default function GenericStatsDashboardClient({
         return `${months[mIndex]} ${shortYear}`;
     };
 
+    // Aggregation Logic
+    const aggregateData = (data: any[], keyName: string) => {
+        if (!data || data.length === 0) return [];
+        const totals: Record<string, number> = {};
+
+        data.forEach(item => {
+            Object.keys(item).forEach(key => {
+                if (key !== 'month') {
+                    totals[key] = (totals[key] || 0) + Number(item[key] || 0);
+                }
+            });
+        });
+
+        return Object.entries(totals).map(([name, count]) => ({
+            [keyName]: name,
+            count
+        })).sort((a, b) => b.count - a.count); // Sort desc
+    };
+
+    const aggregatedDistrictData = districtStats ? aggregateData(districtStats, 'district') : [];
+    const aggregatedChannelData = channelStats ? aggregateData(channelStats, 'channel') : [];
+
     return (
         <div className="space-y-8">
             {title && <h3 className="text-xl font-bold text-gray-800 mb-4">{title}</h3>}
@@ -91,14 +113,14 @@ export default function GenericStatsDashboardClient({
                     {districtStats && (
                         <div className={`bg-white p-6 rounded-xl shadow-sm border border-gray-100 ${!channelStats ? 'md:col-span-2' : ''}`}>
                             <h3 className="text-lg font-bold text-gray-800 mb-6">{title || 'แยกตามอำเภอ'}</h3>
-                            <div className="h-[300px]">
+                            <div className="h-[600px]">
                                 <ResponsiveContainer width="100%" height="100%">
-                                    <BarChart data={districtStats} layout="vertical" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                                    <BarChart data={aggregatedDistrictData} layout="vertical" margin={{ top: 5, right: 30, left: 100, bottom: 5 }}>
                                         <CartesianGrid strokeDasharray="3 3" horizontal={true} stroke="#E5E7EB" />
                                         <XAxis type="number" hide />
                                         <YAxis dataKey="district" type="category" width={100} tick={{ fontSize: 12 }} />
-                                        <Tooltip />
-                                        <Bar dataKey="count" name="จำนวนเรื่อง" fill="#8B5CF6" radius={[0, 4, 4, 0]} barSize={20} />
+                                        <Tooltip cursor={{ fill: 'transparent' }} />
+                                        <Bar dataKey="count" name="จำนวนเรื่อง" fill="#8B5CF6" radius={[0, 4, 4, 0]} barSize={20} label={{ position: 'right' }} />
                                     </BarChart>
                                 </ResponsiveContainer>
                             </div>
@@ -112,7 +134,7 @@ export default function GenericStatsDashboardClient({
                                 <ResponsiveContainer width="100%" height="100%">
                                     <PieChart>
                                         <Pie
-                                            data={channelStats}
+                                            data={aggregatedChannelData}
                                             cx="50%"
                                             cy="50%"
                                             innerRadius={60}
@@ -121,8 +143,8 @@ export default function GenericStatsDashboardClient({
                                             dataKey="count"
                                             nameKey="channel"
                                         >
-                                            {channelStats.map((entry, index) => (
-                                                <Cell key={`cell-${index}`} fill={['#3B82F6', '#10B981', '#F59E0B', '#EF4444'][index % 4]} />
+                                            {aggregatedChannelData.map((entry, index) => (
+                                                <Cell key={`cell-${index}`} fill={['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'][index % 5]} />
                                             ))}
                                         </Pie>
                                         <Tooltip />

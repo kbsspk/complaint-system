@@ -66,7 +66,7 @@ async function setup() {
         official_letter_address text DEFAULT NULL,
         investigation_date date DEFAULT NULL,
         is_guilty tinyint(1) DEFAULT NULL,
-        legal_action_status enum('NONE','WAITING_COMMITTEE','IN_PROGRESS','COMPLETED') DEFAULT NULL,
+        legal_action_status enum('NONE','FINE','PROSECUTION','WAITING_COMMITTEE','IN_PROGRESS','COMPLETED') DEFAULT NULL,
         response_doc_number varchar(100) DEFAULT NULL,
         response_doc_date date DEFAULT NULL,
         investigation_details text DEFAULT NULL,
@@ -76,6 +76,20 @@ async function setup() {
         PRIMARY KEY (id)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
     `);
+
+        console.log('Creating investigation_fines table...');
+        await connection.query(`
+            CREATE TABLE IF NOT EXISTS investigation_fines (
+                id int(11) NOT NULL AUTO_INCREMENT,
+                complaint_id int(11) NOT NULL,
+                act_name varchar(255) DEFAULT NULL,
+                section_name varchar(255) DEFAULT NULL,
+                amount decimal(10,2) DEFAULT NULL,
+                created_at timestamp NOT NULL DEFAULT current_timestamp(),
+                PRIMARY KEY (id),
+                KEY complaint_id (complaint_id)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+        `);
 
         // Seed Admin
         const adminPassword = 'password123';
