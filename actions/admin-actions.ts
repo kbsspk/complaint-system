@@ -56,20 +56,20 @@ export async function rejectComplaint(id: number, reason: string) {
 
 // Accept Complaint (and update details)
 // This might handle file uploads too if "original doc" is uploaded
-export async function acceptComplaint(prevState: any, formData: FormData) {
+export async function acceptComplaint(prevState: unknown, formData: FormData) {
     const session = await getSession();
     if (!session) return { message: 'Unauthorized' };
 
     // Extract basic fields
-    const id = formData.get('id');
-    const complaint_number = formData.get('complaint_number');
-    const received_date = formData.get('received_date');
-    const original_doc_number = formData.get('original_doc_number');
-    const original_doc_date = formData.get('original_doc_date');
-    const channel = formData.get('channel'); // Should be ONLINE if accepting web? User said "Web channel -> Online Auto", but maybe admin can correct it? User said "If via web -> Auto select Online".
-    const type = formData.get('type');
-    const district = formData.get('district');
-    const responsible_person_id = formData.get('responsible_person_id');
+    const id = formData.get('id') as string;
+    const complaint_number = formData.get('complaint_number') as string;
+    const received_date = formData.get('received_date') as string;
+    const original_doc_number = formData.get('original_doc_number') as string;
+    const original_doc_date = formData.get('original_doc_date') as string;
+    const channel = formData.get('channel') as string; // Should be ONLINE if accepting web? User said "Web channel -> Online Auto", but maybe admin can correct it? User said "If via web -> Auto select Online".
+    const type = formData.get('type') as string;
+    const district = formData.get('district') as string;
+    const responsible_person_id = formData.get('responsible_person_id') as string;
 
     // Related Acts (Multi-select)
     const related_acts = formData.getAll('related_acts'); // Array of strings
@@ -100,7 +100,7 @@ export async function acceptComplaint(prevState: any, formData: FormData) {
                 responsible_person_id = ?,
                 is_safety_health_related = ?
         `;
-        const params: any[] = [
+        const params: (string | number | boolean | null)[] = [
             complaint_number, received_date, original_doc_number, original_doc_date,
             channel, type, district, JSON.stringify(related_acts), responsible_person_id || null,
             formData.get('is_safety_health_related') === 'true'
@@ -125,45 +125,45 @@ export async function acceptComplaint(prevState: any, formData: FormData) {
 }
 
 // Manual Create Complaint
-export async function createManualComplaint(prevState: any, formData: FormData) {
+export async function createManualComplaint(prevState: unknown, formData: FormData) {
     const session = await getSession();
     if (!session) return { message: 'Unauthorized' };
 
     // Extract fields
-    const name = formData.get('name');
-    const idCard = formData.get('idCard');
-    const phone = formData.get('phone');
+    const name = formData.get('name') as string;
+    const idCard = formData.get('idCard') as string;
+    const phone = formData.get('phone') as string;
     // For manual create, usually these are contact details.
     // If user wants to reuse them for official letter if not specified? 
     // But manual create form has specific "Requests Official Letter" section too?
     // Let's grab them all.
-    const email = formData.get('email');
-    const address = formData.get('address');
+    const email = formData.get('email') as string;
+    const address = formData.get('address') as string;
 
-    const productName = formData.get('productName');
-    const fdaNumber = formData.get('fdaNumber');
-    const shopName = formData.get('shopName');
-    const location = formData.get('location');
-    const dateIncident = formData.get('dateIncident');
-    const damageValue = formData.get('damageValue');
-    const details = formData.get('details');
+    const productName = formData.get('productName') as string;
+    // const fdaNumber = formData.get('fdaNumber') as string; // Unused
+    const shopName = formData.get('shopName') as string;
+    const location = formData.get('location') as string;
+    const dateIncident = formData.get('dateIncident') as string;
+    const damageValue = formData.get('damageValue') as string;
+    const details = formData.get('details') as string;
 
     // Official fields
-    const complaint_number = formData.get('complaint_number'); // manually entered
-    const received_date = formData.get('received_date');
-    const original_doc_number = formData.get('original_doc_number');
-    const original_doc_date = formData.get('original_doc_date');
-    const channel = formData.get('channel');
-    const type = formData.get('type');
-    const district = formData.get('district');
-    const responsible_person_id = formData.get('responsible_person_id');
+    const complaint_number = formData.get('complaint_number') as string; // manually entered
+    const received_date = formData.get('received_date') as string;
+    const original_doc_number = formData.get('original_doc_number') as string;
+    const original_doc_date = formData.get('original_doc_date') as string;
+    const channel = formData.get('channel') as string;
+    const type = formData.get('type') as string;
+    const district = formData.get('district') as string;
+    const responsible_person_id = formData.get('responsible_person_id') as string;
     const related_acts = formData.getAll('related_acts');
 
     // Official Letter Request
     const wantsOfficialLetter = formData.get('wantsOfficialLetter') === 'on';
-    const officialLetterDeliveryMethod = formData.get('officialLetterDeliveryMethod');
-    const officialLetterEmail = formData.get('officialLetterEmail');
-    const officialLetterAddress = formData.get('officialLetterAddress');
+    const officialLetterDeliveryMethod = formData.get('officialLetterDeliveryMethod') as string;
+    const officialLetterEmail = formData.get('officialLetterEmail') as string;
+    const officialLetterAddress = formData.get('officialLetterAddress') as string;
 
     // Files
     const original_doc_file = formData.get('original_doc_file') as File;
@@ -212,36 +212,36 @@ export async function updateComplaint(id: number, formData: FormData) {
     if (!session || session.role !== 'ADMIN') return { message: 'Unauthorized' };
 
     // Extract fields
-    const name = formData.get('name');
-    const idCard = formData.get('idCard');
-    const phone = formData.get('phone');
-    const email = formData.get('email'); // This will map to 'mail' column
-    const address = formData.get('address'); // This will map to 'official_letter_address' column
-    const productName = formData.get('productName');
-    const fdaNumber = formData.get('fdaNumber');
-    const shopName = formData.get('shopName');
-    const location = formData.get('location');
-    const dateIncident = formData.get('dateIncident');
-    const damageValue = formData.get('damageValue');
-    const details = formData.get('details');
+    const name = formData.get('name') as string;
+    const idCard = formData.get('idCard') as string;
+    const phone = formData.get('phone') as string;
+    const email = formData.get('email') as string; // This will map to 'mail' column
+    const address = formData.get('address') as string; // This will map to 'official_letter_address' column
+    const productName = formData.get('productName') as string;
+    const fdaNumber = formData.get('fdaNumber') as string;
+    const shopName = formData.get('shopName') as string;
+    const location = formData.get('location') as string;
+    const dateIncident = formData.get('dateIncident') as string;
+    const damageValue = formData.get('damageValue') as string;
+    const details = formData.get('details') as string;
 
     // Official fields
-    const complaint_number = formData.get('complaint_number');
-    const received_date = formData.get('received_date');
-    const original_doc_number = formData.get('original_doc_number');
-    const original_doc_date = formData.get('original_doc_date');
-    const channel = formData.get('channel');
-    const type = formData.get('type');
-    const district = formData.get('district');
-    const responsible_person_id = formData.get('responsible_person_id');
+    const complaint_number = formData.get('complaint_number') as string;
+    const received_date = formData.get('received_date') as string;
+    const original_doc_number = formData.get('original_doc_number') as string;
+    const original_doc_date = formData.get('original_doc_date') as string;
+    const channel = formData.get('channel') as string;
+    const type = formData.get('type') as string;
+    const district = formData.get('district') as string;
+    const responsible_person_id = formData.get('responsible_person_id') as string;
 
-    const related_acts = formData.getAll('related_acts');
+    const related_acts = formData.getAll('related_acts').map(x => x.toString());
 
     // Official Letter Request
     const wantsOfficialLetter = formData.get('wantsOfficialLetter') === 'on';
-    const officialLetterDeliveryMethod = formData.get('officialLetterDeliveryMethod');
-    const officialLetterEmail = formData.get('officialLetterEmail');
-    const officialLetterAddress = formData.get('officialLetterAddress');
+    const officialLetterDeliveryMethod = formData.get('officialLetterDeliveryMethod') as string;
+    const officialLetterEmail = formData.get('officialLetterEmail') as string;
+    const officialLetterAddress = formData.get('officialLetterAddress') as string;
 
     // Files (Appended if provided)
     const original_doc_file = formData.get('original_doc_file') as File;
@@ -257,7 +257,7 @@ export async function updateComplaint(id: number, formData: FormData) {
             wants_official_letter = ?, official_letter_method = ?, is_safety_health_related = ?
                 `;
 
-        const params: any[] = [
+        const params: (string | number | boolean | null)[] = [
             name, idCard, phone, officialLetterEmail || email, officialLetterAddress || address, // Prioritize officialLetter* fields
             productName, fdaNumber, shopName, location, dateIncident || null, damageValue, details,
             complaint_number, received_date || null, original_doc_number, original_doc_date || null,
@@ -274,7 +274,7 @@ export async function updateComplaint(id: number, formData: FormData) {
 
         // Evidence files
         if (evidence_files.length > 0 && evidence_files[0].size > 0) {
-            const existingRows = await query('SELECT evidence_files FROM complaints WHERE id = ?', [id]) as any[];
+            const existingRows = await query<{ evidence_files: string }[]>('SELECT evidence_files FROM complaints WHERE id = ?', [id]);
             let existingFiles: string[] = [];
             if (existingRows.length > 0 && existingRows[0].evidence_files) {
                 try {
@@ -298,7 +298,7 @@ export async function updateComplaint(id: number, formData: FormData) {
         await query(updateSql, params);
 
         revalidatePath('/admin/dashboard');
-        revalidatePath(`/ admin / complaints / ${id} `);
+        revalidatePath(`/admin/complaints/${id}`);
         return { success: true, message: 'แก้ไขข้อมูลเรียบร้อยแล้ว' };
     } catch (error) {
         console.error('Update complaint error:', error);
@@ -316,7 +316,7 @@ const createUserSchema = z.object({
     role: z.enum(['ADMIN', 'OFFICIAL']),
 });
 
-export async function createUser(prevState: any, formData: FormData) {
+export async function createUser(prevState: unknown, formData: FormData) {
     const session = await getSession();
     if (session?.role !== 'ADMIN') return { message: 'Unauthorized: Only Admin can create users' };
 
@@ -334,16 +334,13 @@ export async function createUser(prevState: any, formData: FormData) {
         await query('INSERT INTO users (username, full_name, password_hash, role) VALUES (?, ?, ?, ?)', [username, fullName, hashedPassword, role]);
         revalidatePath('/admin/users');
         return { success: true, message: 'User created successfully' };
-    } catch (error: any) {
-        console.error('Create user error:', error);
-        if (error.code === 'ER_DUP_ENTRY') { // MySQL Code
-            return { message: 'Username already exists' };
+    } catch (error) {
+        console.error('Create User Error:', error);
+        const err = error as { code?: string };
+        if (err.code === 'ER_DUP_ENTRY') {
+            return { message: 'ชื่อผู้ใช้งานนี้มีอยู่ในระบบแล้ว' };
         }
-        // Generic duplicate check if code differs (e.g. SQLite/MariaDB/etc) or driver specifics
-        if (error.message?.includes('Duplicate')) {
-            return { message: 'Username already exists' };
-        }
-        return { message: 'Failed to create user' };
+        return { message: 'เกิดข้อผิดพลาดในการสร้างผู้ใช้งาน' };
     }
 }
 
@@ -367,7 +364,7 @@ const investigationSchema = z.object({
     investigationDetails: z.string().optional(),
 });
 
-export async function saveInvestigationResults(prevState: any, formData: FormData) {
+export async function saveInvestigationResults(prevState: unknown, formData: FormData) {
     const session = await getSession();
     if (!session) return { message: 'Unauthorized' };
 
@@ -410,7 +407,7 @@ export async function saveInvestigationResults(prevState: any, formData: FormDat
                 investigation_details = ?,
                 status = ?
         `;
-        const params: any[] = [
+        const params: (string | number | boolean | null)[] = [
             investigationDate,
             isGuilty,
             legalActionType || 'NONE', // Store the type directly
@@ -468,13 +465,16 @@ export async function saveInvestigationResults(prevState: any, formData: FormDat
     }
 }
 
+import { InvestigationFine } from '@/lib/types';
+// ...
+
 export async function getInvestigationFines(complaintId: number) {
     const session = await getSession();
     if (!session) return [];
 
     try {
-        const rows = await query('SELECT * FROM investigation_fines WHERE complaint_id = ? ORDER BY id ASC', [complaintId]);
-        return rows as any[];
+        const rows = await query<InvestigationFine[]>('SELECT * FROM investigation_fines WHERE complaint_id = ? ORDER BY id ASC', [complaintId]);
+        return rows;
     } catch (error) {
         console.error('Get fines error:', error);
         return [];
@@ -487,7 +487,7 @@ export async function getUsedSections(actName?: string) {
 
     try {
         let sql = 'SELECT DISTINCT section_name FROM investigation_fines';
-        const params: any[] = [];
+        const params: string[] = [];
 
         if (actName) {
             sql += ' WHERE act_name = ?';
@@ -496,7 +496,7 @@ export async function getUsedSections(actName?: string) {
 
         sql += ' ORDER BY section_name ASC';
 
-        const rows = await query(sql, params) as any[];
+        const rows = await query<{ section_name: string }[]>(sql, params);
         return rows.map(r => r.section_name as string);
     } catch (error) {
         console.error('Get used sections error:', error);

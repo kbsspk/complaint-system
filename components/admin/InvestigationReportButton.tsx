@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import InvestigationReportModal from './InvestigationReportModal';
+import { Complaint } from '@/lib/types';
 
 interface InvestigationReportButtonProps {
-    complaint: any;
+    complaint: Complaint;
 }
 
 export default function InvestigationReportButton({ complaint }: InvestigationReportButtonProps) {

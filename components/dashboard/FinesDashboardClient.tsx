@@ -1,11 +1,17 @@
 'use client';
 
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
+interface FinesData {
+    month: string;
+    count: number;
+    totalAmount: number;
+}
+
 interface FinesDashboardClientProps {
-    data: any[];
+    data: FinesData[];
     availableActs: string[]; // Pass these in from server for filter dropdown
     availableSections: string[];
 }
@@ -20,20 +26,21 @@ export default function FinesDashboardClient({ data, availableActs, availableSec
 
     // Debounce for section input to avoid too many refreshes
     useEffect(() => {
-        if (sectionFilter !== (searchParams.get('section') || 'ALL')) {
-            updateParams('section', sectionFilter);
-        }
-    }, [sectionFilter]);
-
-    const updateParams = (key: string, value: string) => {
         const params = new URLSearchParams(searchParams);
-        if (value && value !== 'ALL') {
-            params.set(key, value);
-        } else {
-            params.delete(key);
+        const currentSection = params.get('section') || 'ALL';
+
+        if (sectionFilter !== currentSection) {
+            const timer = setTimeout(() => {
+                if (sectionFilter && sectionFilter !== 'ALL') {
+                    params.set('section', sectionFilter);
+                } else {
+                    params.delete('section');
+                }
+                router.push(`?${params.toString()}`);
+            }, 500);
+            return () => clearTimeout(timer);
         }
-        router.push(`?${params.toString()}`);
-    };
+    }, [sectionFilter, searchParams, router]);
 
     const handleActChange = (val: string) => {
         setActFilter(val);
@@ -108,7 +115,7 @@ export default function FinesDashboardClient({ data, availableActs, availableSec
                             <Tooltip
                                 cursor={{ fill: '#F3F4F6' }}
                                 contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                                formatter={(value: any) => [`฿${Number(value).toLocaleString()}`, 'ยอดค่าปรับ']}
+                                formatter={(value: number | undefined) => [`฿${Number(value || 0).toLocaleString()}`, 'ยอดค่าปรับ']}
                                 labelStyle={{ color: '#374151', fontWeight: 600, marginBottom: '4px' }}
                             />
                             <Bar

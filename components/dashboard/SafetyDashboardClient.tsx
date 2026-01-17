@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+
 import { MonthlySafetyStats } from '@/actions/dashboard';
 import SafetyTrendsChart from './SafetyTrendsChart';
 import SafetyStatsTable from './SafetyStatsTable';

@@ -1,10 +1,11 @@
 'use client';
 
 import { PDFDownloadLink } from '@react-pdf/renderer';
+import { Complaint } from '@/lib/types';
 import { ComplaintPdf } from './ComplaintPdf';
 import { useEffect, useState } from 'react';
 
-export default function ComplaintPrintButton({ complaint }: { complaint: any }) {
+export default function ComplaintPrintButton({ complaint }: { complaint: Complaint }) {
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
@@ -26,7 +27,7 @@ export default function ComplaintPrintButton({ complaint }: { complaint: any }) 
             fileName={`complaint-report-${complaint.complaint_number || complaint.id}.pdf`}
             className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-medium transition-colors"
         >
-            {({ blob, url, loading, error }) => (
+            {({ loading }) => (
                 <>
                     <span className="material-symbols-outlined text-[20px]">print</span>
                     <span>{loading ? 'กำลังสร้าง PDF...' : 'พิมพ์รายงาน'}</span>

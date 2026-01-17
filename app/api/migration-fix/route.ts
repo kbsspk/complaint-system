@@ -5,18 +5,21 @@ export async function GET() {
     try {
         try {
             await query(`ALTER TABLE complaints ADD COLUMN response_letter_file TEXT NULL`);
-        } catch (e: any) {
-            if (e.code !== 'ER_DUP_FIELDNAME') throw e;
+        } catch (e) {
+            const err = e as { code?: string };
+            if (err.code !== 'ER_DUP_FIELDNAME') throw e;
         }
 
         try {
             await query(`ALTER TABLE complaints ADD COLUMN action_evidence_file TEXT NULL`);
-        } catch (e: any) {
-            if (e.code !== 'ER_DUP_FIELDNAME') throw e;
+        } catch (e) {
+            const err = e as { code?: string };
+            if (err.code !== 'ER_DUP_FIELDNAME') throw e;
         }
 
         return NextResponse.json({ success: true, message: 'Migration completed successfully' });
-    } catch (e: any) {
-        return NextResponse.json({ success: false, error: e.message }, { status: 500 });
+    } catch (e) {
+        const err = e as Error;
+        return NextResponse.json({ success: false, error: err.message }, { status: 500 });
     }
 }

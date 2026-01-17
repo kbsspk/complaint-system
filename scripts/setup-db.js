@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 const mysql = require('mysql2/promise');
 const bcrypt = require('bcryptjs');
-require('dotenv').config({ path: '.env.local' });
+require('dotenv').config({ path: '.env' });
 
 async function setup() {
     const connection = await mysql.createConnection({

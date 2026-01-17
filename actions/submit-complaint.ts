@@ -1,6 +1,6 @@
 'use server';
 
-import { z } from 'zod';
+
 import { complaintSchema } from '@/lib/schemas';
 import { query } from '@/lib/db';
 import { revalidatePath } from 'next/cache';
@@ -15,7 +15,7 @@ export type ActionState = {
 };
 
 export async function submitComplaint(prevState: ActionState, formData: FormData): Promise<ActionState> {
-    const rawData: any = {};
+    const rawData: Record<string, unknown> = {};
     const files: File[] = [];
 
     // Extract data

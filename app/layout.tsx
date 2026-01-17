@@ -17,6 +17,12 @@ const notoSansThai = Noto_Sans_Thai({
 export const metadata: Metadata = {
   title: "แจ้งเรื่องร้องเรียน - กลุ่มงานคุ้มครองผู้บริโภคฯ สมุทรปราการ",
   description: "ระบบรับเรื่องร้องเรียน สำนักงานสาธารณสุขจังหวัดสมุทรปราการ",
+  icons: {
+    icon: '/favicon.ico',
+  },
+  other: {
+    stylesheet: "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap"
+  }
 };
 
 export default function RootLayout({
@@ -26,10 +32,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="th" className={`${publicSans.variable} ${notoSansThai.variable}`}>
-      <head>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" />
-      </head>
       <body className="antialiased font-body bg-background-light text-text-main min-h-screen flex flex-col">
+        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" />
         {children}
       </body>
     </html>

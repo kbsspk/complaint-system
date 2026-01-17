@@ -10,26 +10,9 @@ import { getOfficers } from '@/actions/officer-actions';
 import { useEffect } from 'react';
 
 import AssignComplaintModal from './AssignComplaintModal';
+import { Complaint, User } from '@/lib/types';
 
-interface Complaint {
-    id: number;
-    created_at: string;
-    complainant_name: string;
-    phone: string;
-    product_name: string;
-    details: string;
-    status: 'PENDING' | 'RESOLVED' | 'REJECTED' | 'IN_PROGRESS';
-    evidence_files?: string;
-    channel?: string;
-    complaint_number?: string;
-    responsible_person_id?: number;
-    responsible_person_name?: string;
-    investigation_date?: string;
-    received_date?: string;
-    shop_name?: string;
-}
-
-export default function AdminDashboardClient({ complaints, currentUser, role }: { complaints: Complaint[], currentUser: any, role: string }) {
+export default function AdminDashboardClient({ complaints, role }: { complaints: Complaint[], currentUser: User | null, role: string }) {
     const [activeTab, setActiveTab] = useState<'INCOMING' | 'ACTIVE' | 'REJECTED'>('INCOMING');
     const [selectedComplaint, setSelectedComplaint] = useState<Complaint | null>(null);
     const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false);
@@ -403,7 +386,7 @@ export default function AdminDashboardClient({ complaints, currentUser, role }: 
                 isAssignModalOpen && selectedComplaint && (
                     <AssignComplaintModal
                         complaintId={selectedComplaint.id}
-                        currentOfficerId={selectedComplaint.responsible_person_id}
+                        currentOfficerId={selectedComplaint.responsible_person_id ?? undefined}
                         onClose={() => setIsAssignModalOpen(false)}
                         onSuccess={handleSuccess}
                     />

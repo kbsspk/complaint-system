@@ -1,7 +1,7 @@
 'use client';
 
 import type { MonthlyStats } from '@/actions/dashboard';
-import { th } from 'date-fns/locale';
+
 
 interface ComplaintStatsTableProps {
     data: MonthlyStats[];

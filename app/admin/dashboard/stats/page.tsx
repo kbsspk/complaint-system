@@ -9,7 +9,15 @@ import {
     getDistinctActs,
     getDistinctSections,
     getOfficerPerformanceStats,
-    getGroupPerformanceStats
+    getGroupPerformanceStats,
+    MonthlyStats,
+    MonthlyActStats,
+    MonthlyDistrictStats,
+    MonthlyChannelStats,
+    MonthlySafetyStats,
+    MonthlyFineStats,
+    OfficerPerformanceStats,
+    GroupPerformanceStats
 } from '@/actions/dashboard';
 import ComplaintTrendsChart from '@/components/dashboard/ComplaintTrendsChart';
 import ComplaintStatsTable from '@/components/dashboard/ComplaintStatsTable';
@@ -33,15 +41,15 @@ export default async function DashboardStatsPage(props: DashboardStatsPageProps)
     const view = typeof searchParams.view === 'string' ? searchParams.view : 'status';
 
     // Data containers
-    let statusStats: any[] = [];
-    let actStats: any[] = [];
-    let districtStats: any[] = [];
-    let channelStats: any[] = [];
-    let safetyStats: any[] = [];
-    let finesStats: any[] = [];
-    let officerStats: any[] = [];
-    let groupStats12M: any = null;
-    let groupStatsAll: any = null;
+    let statusStats: MonthlyStats[] = [];
+    let actStats: MonthlyActStats[] = [];
+    let districtStats: MonthlyDistrictStats[] = [];
+    let channelStats: MonthlyChannelStats[] = [];
+    let safetyStats: MonthlySafetyStats[] = [];
+    let finesStats: MonthlyFineStats[] = [];
+    let officerStats: OfficerPerformanceStats[] = [];
+    let groupStats12M: GroupPerformanceStats | null = null;
+    let groupStatsAll: GroupPerformanceStats | null = null;
     let availableActs: string[] = [];
     let availableSections: string[] = [];
 

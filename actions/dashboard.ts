@@ -27,8 +27,8 @@ export async function getMonthlyComplaintStats(endDateStr?: string): Promise<Mon
         const monthKeys: string[] = [];
 
         // Fix timezone issues by working with integers
-        let currentY = endObj.getFullYear();
-        let currentM = endObj.getMonth(); // 0-indexed (Dec = 11)
+        const currentY = endObj.getFullYear();
+        const currentM = endObj.getMonth(); // 0-indexed (Dec = 11)
 
         for (let i = 0; i < 12; i++) {
             let y = currentY;
@@ -65,7 +65,7 @@ export async function getMonthlyComplaintStats(endDateStr?: string): Promise<Mon
             ORDER BY month ASC
         `;
 
-        const rows = await query(sql, [startKey, endKey]) as any[];
+        const rows = await query<{ month: string; completed: number | string; inspected: number | string; pending: number | string }[]>(sql, [startKey, endKey]);
 
         for (const row of rows) {
             const { month, completed, inspected, pending } = row;
@@ -105,8 +105,8 @@ export async function getMonthlyActStats(endDateStr?: string): Promise<MonthlyAc
         const monthKeys: string[] = [];
         const statsMap = new Map<string, MonthlyActStats>();
 
-        let currentY = endObj.getFullYear();
-        let currentM = endObj.getMonth();
+        const currentY = endObj.getFullYear();
+        const currentM = endObj.getMonth();
 
         // Initialize map with 0 for all months
         for (let i = 0; i < 12; i++) {
@@ -135,7 +135,7 @@ export async function getMonthlyActStats(endDateStr?: string): Promise<MonthlyAc
                 AND DATE_FORMAT(COALESCE(received_date, created_at), '%Y-%m') <= ?
         `;
 
-        const rows = await query(sql, [startKey, endKey]) as any[];
+        const rows = await query<{ month: string; related_acts: string | null }[]>(sql, [startKey, endKey]);
 
         for (const row of rows) {
             const { month, related_acts } = row;
@@ -149,7 +149,7 @@ export async function getMonthlyActStats(endDateStr?: string): Promise<MonthlyAc
                     } else if (Array.isArray(related_acts)) {
                         acts = related_acts;
                     }
-                } catch (e) {
+                } catch {
                     // ignore parse error logic
                 }
 
@@ -189,8 +189,8 @@ export async function getMonthlyDistrictStats(endDateStr?: string): Promise<Mont
         const monthKeys: string[] = [];
         const statsMap = new Map<string, MonthlyDistrictStats>();
 
-        let currentY = endObj.getFullYear();
-        let currentM = endObj.getMonth();
+        const currentY = endObj.getFullYear();
+        const currentM = endObj.getMonth();
 
         for (let i = 0; i < 12; i++) {
             let y = currentY;
@@ -216,7 +216,7 @@ export async function getMonthlyDistrictStats(endDateStr?: string): Promise<Mont
             GROUP BY month, district
         `;
 
-        const rows = await query(sql, [startKey, endKey]) as any[];
+        const rows = await query<{ month: string; district: string; count: number | string }[]>(sql, [startKey, endKey]);
 
         for (const row of rows) {
             const { month, district, count } = row;
@@ -252,8 +252,8 @@ export async function getMonthlyChannelStats(endDateStr?: string): Promise<Month
         const monthKeys: string[] = [];
         const statsMap = new Map<string, MonthlyChannelStats>();
 
-        let currentY = endObj.getFullYear();
-        let currentM = endObj.getMonth();
+        const currentY = endObj.getFullYear();
+        const currentM = endObj.getMonth();
 
         for (let i = 0; i < 12; i++) {
             let y = currentY;
@@ -279,7 +279,7 @@ export async function getMonthlyChannelStats(endDateStr?: string): Promise<Month
             GROUP BY month, channel
         `;
 
-        const rows = await query(sql, [startKey, endKey]) as any[];
+        const rows = await query<{ month: string; channel: string; count: number | string }[]>(sql, [startKey, endKey]);
 
         // Map ENUM to Thai
         const channelMap: Record<string, string> = {
@@ -325,8 +325,8 @@ export async function getMonthlySafetyStats(endDateStr?: string): Promise<Monthl
         const monthKeys: string[] = [];
         const statsMap = new Map<string, MonthlySafetyStats>();
 
-        let currentY = endObj.getFullYear();
-        let currentM = endObj.getMonth();
+        const currentY = endObj.getFullYear();
+        const currentM = endObj.getMonth();
 
         for (let i = 0; i < 12; i++) {
             let y = currentY;
@@ -352,7 +352,7 @@ export async function getMonthlySafetyStats(endDateStr?: string): Promise<Monthl
             GROUP BY month
         `;
 
-        const rows = await query(sql, [startKey, endKey]) as any[];
+        const rows = await query<{ month: string; safety_count: number | string; other_count: number | string }[]>(sql, [startKey, endKey]);
 
         for (const row of rows) {
             const { month, safety_count, other_count } = row;
@@ -393,8 +393,8 @@ export async function getMonthlyFineStats(
         const monthKeys: string[] = [];
         const statsMap = new Map<string, MonthlyFineStats>();
 
-        let currentY = endObj.getFullYear();
-        let currentM = endObj.getMonth();
+        const currentY = endObj.getFullYear();
+        const currentM = endObj.getMonth();
 
         for (let i = 0; i < 12; i++) {
             let y = currentY;
@@ -420,7 +420,7 @@ export async function getMonthlyFineStats(
                 AND DATE_FORMAT(f.created_at, '%Y-%m') <= ?
         `;
 
-        const params: any[] = [startKey, endKey];
+        const params: (string | number)[] = [startKey, endKey];
 
         if (filterAct && filterAct !== 'ALL') {
             sql += ' AND f.act_name = ?';
@@ -434,7 +434,7 @@ export async function getMonthlyFineStats(
 
         sql += ' GROUP BY month';
 
-        const rows = await query(sql, params) as any[];
+        const rows = await query<{ month: string; total: number | string; count: number | string }[]>(sql, params);
 
         for (const row of rows) {
             const { month, total, count } = row;
@@ -454,7 +454,7 @@ export async function getMonthlyFineStats(
 
 export async function getDistinctActs() {
     try {
-        const rows = await query('SELECT DISTINCT act_name FROM investigation_fines ORDER BY act_name ASC') as any[];
+        const rows = await query<{ act_name: string }[]>('SELECT DISTINCT act_name FROM investigation_fines ORDER BY act_name ASC');
         return rows.map(r => r.act_name as string);
     } catch (e) {
         console.error('Failed to get acts:', e);
@@ -466,7 +466,7 @@ export async function getDistinctActs() {
 export async function getDistinctSections(actName?: string) {
     try {
         let sql = 'SELECT DISTINCT section_name FROM investigation_fines';
-        const params: any[] = [];
+        const params: string[] = [];
 
         if (actName && actName !== 'ALL') {
             sql += ' WHERE act_name = ?';
@@ -475,7 +475,7 @@ export async function getDistinctSections(actName?: string) {
 
         sql += ' ORDER BY section_name ASC';
 
-        const rows = await query(sql, params) as any[];
+        const rows = await query<{ section_name: string }[]>(sql, params);
         return rows.map(r => r.section_name as string);
     } catch (e) {
         console.error('Failed to get sections:', e);
@@ -502,8 +502,8 @@ export async function getOfficerPerformanceStats(endDateStr?: string): Promise<O
         }
 
         // Calculate start date (12 months ago)
-        let currentY = endObj.getFullYear();
-        let currentM = endObj.getMonth();
+        const currentY = endObj.getFullYear();
+        const currentM = endObj.getMonth();
         let startY = currentY;
         let startM = currentM - 11;
         while (startM < 0) {
@@ -541,7 +541,7 @@ export async function getOfficerPerformanceStats(endDateStr?: string): Promise<O
             ORDER BY avgDays DESC
         `;
 
-        const rows = await query(sql, [startKey, endKey]) as any[];
+        const rows = await query<{ officerId: number; officerName: string; username: string; avgDays: number | string | null; totalCases: number | string; pendingCount: number | string }[]>(sql, [startKey, endKey]);
 
         return rows.map(row => ({
             officerId: row.officerId,
@@ -577,7 +577,7 @@ export async function getGroupPerformanceStats(timeRange: 'ALL' | '12_MONTHS'): 
             WHERE status != 'REJECTED'
         `;
 
-        const params: any[] = [];
+        const params: string[] = [];
 
         if (timeRange === '12_MONTHS') {
             const now = new Date();
@@ -591,7 +591,7 @@ export async function getGroupPerformanceStats(timeRange: 'ALL' | '12_MONTHS'): 
             params.push(oneYearAgo.toISOString().split('T')[0]); // YYYY-MM-DD
         }
 
-        const rows = await query(sql, params) as any[];
+        const rows = await query<{ avgDays: number | string | null; totalCases: number | string }[]>(sql, params);
 
         if (rows.length > 0) {
             return {

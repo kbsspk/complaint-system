@@ -10,9 +10,10 @@ const ACTS = [
     'พืชกระท่อม', 'สุขาภิบาลอาหาร'
 ];
 
+import { Complaint } from '@/lib/types';
+
 interface InvestigationReportModalProps {
-    complaintId: number;
-    currentData: any; // Pass existing data if any to prefill
+    complaint: Complaint;
     onClose: () => void;
     onSuccess: () => void;
 }
@@ -31,7 +32,12 @@ const initialState: InvestigationState = {
     errors: null,
 };
 
-export default function InvestigationReportModal({ complaintId, currentData, onClose, onSuccess }: InvestigationReportModalProps) {
+export default function InvestigationReportModal({ complaint, onClose, onSuccess }: InvestigationReportModalProps) {
+    const complaintId = complaint.id;
+    // We need currentData or similar if we want to prefill.
+    // Ideally we fetch it or it's passed in 'complaint' but 'complaint' might not have all fields if they are separate tables.
+    // However, looking at types.ts, `Complaint` has `is_guilty` etc.
+    const currentData = complaint;
     const [state, formAction, isPending] = useActionState(saveInvestigationResults, initialState);
     // Prefill logic
     // const [isGuilty, setIsGuilty] = useState(currentData?.is_guilty ? 'true' : 'false');
@@ -65,9 +71,9 @@ export default function InvestigationReportModal({ complaintId, currentData, onC
 
             if (type === 'FINE') {
                 setLoadingFines(true);
-                getInvestigationFines(complaintId).then((data: any[]) => {
+                getInvestigationFines(complaintId).then((data: { act_name: string; section_name: string; amount: number }[]) => {
                     if (data && data.length > 0) {
-                        setFines(data.map((f: any) => ({
+                        setFines(data.map((f) => ({
                             act: f.act_name,
                             section: f.section_name,
                             amount: f.amount.toString()
@@ -345,6 +351,7 @@ export default function InvestigationReportModal({ complaintId, currentData, onC
                             placeholder="ระบุรายละเอียดเพิ่มเติม (เช่น ยอดเปรียบเทียบปรับ...)"
                         ></textarea>
                     </div>
+
 
                     {/* Status Update */}
                     <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">

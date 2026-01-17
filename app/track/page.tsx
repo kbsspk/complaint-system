@@ -7,6 +7,7 @@ import { useActionState } from 'react';
 import { trackComplaint } from '@/actions/track-complaint';
 import { useState } from 'react';
 import ComplaintDetailModal from '@/components/ComplaintDetailModal';
+import { Complaint } from '@/lib/types';
 
 const initialState = {
     success: false,
@@ -16,10 +17,10 @@ const initialState = {
 
 export default function TrackPage() {
     const [state, formAction, isPending] = useActionState(trackComplaint, initialState);
-    const [selectedComplaint, setSelectedComplaint] = useState<any>(null);
+    const [selectedComplaint, setSelectedComplaint] = useState<Complaint | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleViewDetails = (complaint: any) => {
+    const handleViewDetails = (complaint: Complaint) => {
         setSelectedComplaint(complaint);
         setIsModalOpen(true);
     };
@@ -68,7 +69,7 @@ export default function TrackPage() {
                     {state.success && state.data && (
                         <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4">
                             <h3 className="text-lg font-bold text-text-main px-2">ผลการค้นหา ({state.data.length} รายการ)</h3>
-                            {state.data.map((item: any) => (
+                            {state.data.map((item: Complaint) => (
                                 <div key={item.id} className="bg-white rounded-lg border border-border-light p-5 shadow-sm flex flex-col sm:flex-row justify-between gap-4">
                                     <div className="flex flex-col gap-1 min-w-0 flex-1 mr-2">
                                         <div className="flex items-center gap-2 mb-1">

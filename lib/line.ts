@@ -29,7 +29,9 @@ export async function sendLineNotification(message: string) {
             }
         );
         console.log('Line notification sent successfully');
-    } catch (error: any) {
-        console.error('Failed to send Line notification:', error.response?.data || error.message);
+    } catch (error) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const err = error as any;
+        console.error('Failed to send Line notification:', err.response?.data || err.message);
     }
 }

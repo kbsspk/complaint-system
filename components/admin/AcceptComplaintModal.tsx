@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { acceptComplaint } from '@/actions/admin-actions';
-import { useFormStatus } from 'react-dom';
+
+import { Complaint } from '@/lib/types';
 
 interface AcceptComplaintModalProps {
-    complaint: any | null; // Replace 'any' with proper type if available
+    complaint: Complaint | null;
     onClose: () => void;
     onSuccess: () => void;
 }
@@ -141,7 +142,7 @@ export default function AcceptComplaintModal({ complaint, onClose, onSuccess }: 
                         <label className="block text-sm font-medium text-gray-700 mb-1">ผู้รับผิดชอบ</label>
                         <select name="responsible_person_id" className="w-full border rounded p-2 text-gray-500">
                             <option value="">รอการมอบหมาย</option>
-                            {officers.map((off: any) => (
+                            {officers.map((off) => (
                                 <option key={off.id} value={off.id}>{off.full_name}</option>
                             ))}
                         </select>

@@ -5,13 +5,14 @@ import { query } from '@/lib/db';
 import bcrypt from 'bcryptjs';
 import { createSession, deleteSession } from '@/lib/session';
 import { redirect } from 'next/navigation';
+import { User } from '@/lib/types'; // Moved import to the top
 
 const loginSchema = z.object({
     username: z.string().min(1, 'กรุณาระบุชื่อผู้ใช้งาน'),
     password: z.string().min(1, 'กรุณาระบุรหัสผ่าน'),
 });
 
-export async function login(prevState: any, formData: FormData) {
+export async function login(prevState: unknown, formData: FormData) {
     const result = loginSchema.safeParse(Object.fromEntries(formData));
 
     if (!result.success) {
@@ -24,7 +25,7 @@ export async function login(prevState: any, formData: FormData) {
     const { username, password } = result.data;
 
     try {
-        const rows = await query('SELECT * FROM users WHERE username = ?', [username]) as any[];
+        const rows = await query<User[]>('SELECT * FROM users WHERE username = ?', [username]);
 
         if (rows.length === 0) {
             return { message: 'ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง' };

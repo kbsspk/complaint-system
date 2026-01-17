@@ -3,7 +3,9 @@
 import { useState } from 'react';
 import EditComplaintModal from './EditComplaintModal';
 
-export default function ComplaintEditButton({ complaint }: { complaint: any }) {
+import { Complaint } from '@/lib/types';
+
+export default function ComplaintEditButton({ complaint }: { complaint: Complaint }) {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleSuccess = () => {

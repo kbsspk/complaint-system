@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from 'react';
 
+import { Complaint } from '@/lib/types';
+
 interface ComplaintDetailModalProps {
     isOpen: boolean;
     onClose: () => void;
-    complaint: any;
+    complaint: Complaint | null;
 }
 
 export default function ComplaintDetailModal({ isOpen, onClose, complaint }: ComplaintDetailModalProps) {
@@ -30,7 +32,7 @@ export default function ComplaintDetailModal({ isOpen, onClose, complaint }: Com
     if (!isOpen || !complaint) return null;
 
     // Helper to format date
-    const formatDate = (dateString: string | null) => {
+    const formatDate = (dateString: string | Date | null | undefined) => {
         if (!dateString) return '-';
         return new Date(dateString).toLocaleDateString('th-TH', {
             year: 'numeric',

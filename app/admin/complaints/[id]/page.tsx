@@ -2,6 +2,7 @@ import { query } from '@/lib/db';
 import { format } from 'date-fns';
 import { th } from 'date-fns/locale';
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import ComplaintEditButton from '@/components/admin/ComplaintEditButton';
 
@@ -9,17 +10,18 @@ import { getSession } from '@/lib/session';
 import InvestigationReportButton from '@/components/admin/InvestigationReportButton';
 import ComplaintPrintButton from '@/components/admin/ComplaintPrintButton';
 
+import { Complaint } from '@/lib/types';
+
 async function getComplaint(id: string) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const rows = await query('SELECT * FROM complaints WHERE id = ?', [id]) as any[];
+    const rows = await query<Complaint[]>('SELECT * FROM complaints WHERE id = ?', [id]);
     if (rows.length === 0) return null;
     return rows[0];
 }
 
 // Helper to safely format dates
-const formatDate = (dateString: string | null | undefined, formatStr: string = 'd MMM yyyy') => {
+const formatDate = (dateString: string | Date | null | undefined, formatStr: string = 'd MMM yyyy') => {
     if (!dateString) return '-';
-    const date = new Date(dateString);
+    const date = typeof dateString === 'string' ? new Date(dateString) : dateString;
     // Check if date is invalid
     if (isNaN(date.getTime())) return '-';
     return format(date, formatStr, { locale: th });
@@ -153,10 +155,18 @@ export default async function ComplaintDetailPage({ params }: { params: Promise<
                                         {complaint.related_acts ? (
                                             (() => {
                                                 try {
-                                                    const acts = JSON.parse(complaint.related_acts);
-                                                    return Array.isArray(acts) ? acts.map((act: string, idx: number) => (
-                                                        <span key={idx} className="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs">{act}</span>
-                                                    )) : <span>{complaint.related_acts}</span>
+                                                    if (Array.isArray(complaint.related_acts)) {
+                                                        return complaint.related_acts.map((act: string, idx: number) => (
+                                                            <span key={idx} className="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs">{act}</span>
+                                                        ));
+                                                    }
+                                                    if (typeof complaint.related_acts === 'string') {
+                                                        const acts = JSON.parse(complaint.related_acts);
+                                                        return Array.isArray(acts) ? acts.map((act: string, idx: number) => (
+                                                            <span key={idx} className="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs">{act}</span>
+                                                        )) : <span>{complaint.related_acts}</span>;
+                                                    }
+                                                    return <span>{complaint.related_acts}</span>;
                                                 } catch { return <span>{complaint.related_acts}</span> }
                                             })()
                                         ) : '-'}
@@ -224,9 +234,13 @@ export default async function ComplaintDetailPage({ params }: { params: Promise<
                                                     <span className="text-xs font-bold mt-1">PDF File</span>
                                                 </div>
                                             ) : (
-                                                <img src={file} alt="evidence" className="w-full h-full object-cover transition-transform group-hover:scale-105" />
+                                                <Image
+                                                    src={file}
+                                                    alt="evidence"
+                                                    fill
+                                                    className="object-cover transition-transform group-hover:scale-105"
+                                                />
                                             )}
-                                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
                                         </a>
                                     ))}
                                 </div>

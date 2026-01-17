@@ -1,4 +1,5 @@
-const mysql = require('mysql2/promise');
+/* eslint-disable @typescript-eslint/no-require-imports */
+const mysql = require('mysql2/promise'); // Added this line to import mysql2/promise
 require('dotenv').config({ path: '.env.local' });
 
 async function checkSchema() {

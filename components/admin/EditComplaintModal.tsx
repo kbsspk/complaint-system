@@ -5,37 +5,8 @@ import { updateComplaint } from '@/actions/admin-actions';
 import { getOfficers } from '@/actions/officer-actions';
 import { format } from 'date-fns';
 
-// Define a minimal complaint interface for props
-interface Complaint {
-    id: number;
-    complainant_name: string;
-    id_card: string;
-    phone: string;
-    email?: string;
-    address?: string;
-    product_name?: string;
-    fda_number?: string;
-    shop_name?: string;
-    location?: string;
-    date_incident?: string;
-    damage_value?: string;
-    details?: string;
-    // Official info
-    complaint_number?: string;
-    received_date?: string;
-    original_doc_number?: string;
-    original_doc_date?: string;
-    channel?: string;
-    type?: string;
-    district?: string;
-    responsible_person_id?: number | null;
-    related_acts?: string; // JSON string
-    wants_official_letter?: boolean | number;
-    official_letter_method?: string;
-    official_letter_email?: string;
-    official_letter_address?: string;
-    is_safety_health_related?: boolean | number;
-}
+import { Complaint } from '@/lib/types';
+
 
 interface EditComplaintModalProps {
     complaint: Complaint;
@@ -53,7 +24,7 @@ export default function EditComplaintModal({ complaint, onClose, onSuccess }: Ed
     useEffect(() => {
         getOfficers().then(setOfficers);
         setWantsOfficialLetter(!!complaint.wants_official_letter);
-        setDeliveryMethod(complaint.official_letter_method as any || null);
+        setDeliveryMethod((complaint.official_letter_method as 'EMAIL' | 'POST' | undefined) || null);
         setIsSafetyRelated(!!complaint.is_safety_health_related);
     }, [complaint]);
 
@@ -75,7 +46,9 @@ export default function EditComplaintModal({ complaint, onClose, onSuccess }: Ed
     const isActSelected = (act: string) => {
         if (!complaint.related_acts) return false;
         try {
-            const acts = JSON.parse(complaint.related_acts);
+            const acts = typeof complaint.related_acts === 'string'
+                ? JSON.parse(complaint.related_acts)
+                : complaint.related_acts;
             return Array.isArray(acts) && acts.includes(act);
         } catch {
             return complaint.related_acts === act;
@@ -237,7 +210,7 @@ export default function EditComplaintModal({ complaint, onClose, onSuccess }: Ed
                                 <span className="font-semibold text-gray-800">ประสงค์จะรับผลการตรวจสอบเป็นหนังสือราชการ</span>
                             </label>
                             <p className="text-sm text-gray-500 mt-2 ml-8">
-                                กรณีไม่ประสงค์รับหนังสือราชการ ท่านยังคงสามารถติดตามผลการดำเนินการ และดูหนังสือราชการได้ที่เมนู "ติดตามเรื่องร้องเรียน" โดยใช้เลขบัตรประชาชนที่แจ้งเรื่องเข้ามา
+                                กรณีไม่ประสงค์รับหนังสือราชการ ท่านยังคงสามารถติดตามผลการดำเนินการ และดูหนังสือราชการได้ที่เมนู &quot;ติดตามเรื่องร้องเรียน&quot; โดยใช้เลขบัตรประชาชนที่แจ้งเรื่องเข้ามา
                             </p>
 
                             {wantsOfficialLetter && (

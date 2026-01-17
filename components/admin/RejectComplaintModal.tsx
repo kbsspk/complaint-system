@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { rejectComplaint } from '@/actions/admin-actions';
-import { useFormStatus } from 'react-dom';
 
 interface RejectComplaintModalProps {
     complaintId: number | null;

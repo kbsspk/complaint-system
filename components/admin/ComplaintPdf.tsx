@@ -129,8 +129,10 @@ const insertBreaks = (text: string): string[] => {
     if (!text) return [];
 
     // Try Intl.Segmenter
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (typeof Intl !== 'undefined' && (Intl as any).Segmenter) {
         try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const segmenter = new (Intl as any).Segmenter('th', { granularity: 'word' });
             const segments = segmenter.segment(text);
             const words = [];
@@ -152,13 +154,25 @@ const insertBreaks = (text: string): string[] => {
     return clusters || [text];
 };
 
-export const ComplaintPdf = ({ complaint }: { complaint: any }) => {
+import { Complaint } from '@/lib/types';
+
+export const ComplaintPdf = ({ complaint }: { complaint: Complaint }) => {
     let evidenceFiles: string[] = [];
     try {
         if (complaint.evidence_files) {
-            evidenceFiles = JSON.parse(complaint.evidence_files);
+            if (Array.isArray(complaint.evidence_files)) {
+                evidenceFiles = complaint.evidence_files;
+            } else if (typeof complaint.evidence_files === 'string') {
+                evidenceFiles = JSON.parse(complaint.evidence_files);
+            }
+            if (!Array.isArray(evidenceFiles)) {
+                evidenceFiles = [];
+            }
         }
-    } catch (e) { }
+    } catch (e) {
+        console.error("Failed to parse evidence_files:", e);
+        evidenceFiles = [];
+    }
 
     return (
         <Document>
@@ -182,9 +196,9 @@ export const ComplaintPdf = ({ complaint }: { complaint: any }) => {
                             <Checkbox label="โทรศัพท์" checked={complaint.channel === 'PHONE'} />
                             <Checkbox label="Line OA" checked={complaint.channel === 'LINE_OA'} />
                             <Checkbox label="จดหมาย" checked={complaint.channel === 'LETTER'} />
-                            <Checkbox label="อื่นๆ" checked={!['WALK_IN', 'PHONE', 'LINE_OA', 'LETTER'].includes(complaint.channel)} />
-                            {!['WALK_IN', 'PHONE', 'LINE_OA', 'LETTER'].includes(complaint.channel) && (
-                                <Text style={{ borderBottom: '1px dotted #000', minWidth: 50 }}> {complaint.channel} </Text>
+                            <Checkbox label="อื่นๆ" checked={!['WALK_IN', 'PHONE', 'LINE_OA', 'LETTER'].includes(complaint.channel || '')} />
+                            {!['WALK_IN', 'PHONE', 'LINE_OA', 'LETTER'].includes(complaint.channel || '') && (
+                                <Text style={{ borderBottom: '1px dotted #000', minWidth: 50 }}> {complaint.channel || ''} </Text>
                             )}
                         </View>
                     </View>
@@ -326,6 +340,7 @@ export const ComplaintPdf = ({ complaint }: { complaint: any }) => {
                     return (
                         <Page key={index} size="A4" style={styles.imagePage}>
                             <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 20 }}>เอกสารแนบ {index + 1}</Text>
+                            {/* eslint-disable-next-line jsx-a11y/alt-text */}
                             <Image src={file} style={styles.evidenceImage} />
                         </Page>
                     );
