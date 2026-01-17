@@ -4,8 +4,9 @@
 import { complaintSchema } from '@/lib/schemas';
 import { query } from '@/lib/db';
 import { revalidatePath } from 'next/cache';
-import { writeFile } from 'fs/promises';
-import { join } from 'path';
+import { uploadToCloudinary } from '@/lib/cloudinary';
+// import { writeFile } from 'fs/promises';
+// import { join } from 'path';
 import { sendLineNotification } from '@/lib/line';
 
 export type ActionState = {
@@ -50,24 +51,19 @@ export async function submitComplaint(prevState: ActionState, formData: FormData
     try {
         // Handle File Uploads
         if (files.length > 0) {
-            const uploadDir = join(process.cwd(), 'public', 'uploads');
-
             for (const file of files) {
-                // Simple validation: check type and size
+                // Simple validation: check type
                 if (!file.type.startsWith('image/') && file.type !== 'application/pdf') continue;
                 if (file.size > 5 * 1024 * 1024) continue; // Skip > 5MB
 
-                const bytes = await file.arrayBuffer();
-                const buffer = Buffer.from(bytes);
-
-                // unique filename
-                const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-                const ext = file.name.split('.').pop();
-                const filename = `evidence-${uniqueSuffix}.${ext}`;
-                const filepath = join(uploadDir, filename);
-
-                await writeFile(filepath, buffer);
-                filePaths.push(`/uploads/${filename}`);
+                try {
+                    const url = await uploadToCloudinary(file, 'complaints/evidence');
+                    filePaths.push(url);
+                } catch (error) {
+                    console.error('Failed to upload file to Cloudinary:', error);
+                    // Decide whether to fail the whole request or just skip the file.
+                    // Let's skip the file but warn.
+                }
             }
         }
 

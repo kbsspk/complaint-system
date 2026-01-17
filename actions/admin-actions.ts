@@ -5,20 +5,16 @@ import { query } from '@/lib/db';
 import bcrypt from 'bcryptjs';
 import { revalidatePath } from 'next/cache';
 import { getSession } from '@/lib/session';
-import { writeFile } from 'fs/promises';
-import { join } from 'path';
+import { uploadToCloudinary } from '@/lib/cloudinary';
 
-async function uploadFile(file: File): Promise<string | null> {
+async function uploadFile(file: File, folder: string = 'complaints/documents'): Promise<string | null> {
     if (!file || file.size === 0) return null;
-    const uploadDir = join(process.cwd(), 'public', 'uploads');
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    const ext = file.name.split('.').pop();
-    const filename = `doc-${uniqueSuffix}.${ext}`;
-    const filepath = join(uploadDir, filename);
-    await writeFile(filepath, buffer);
-    return `/uploads/${filename}`;
+    try {
+        return await uploadToCloudinary(file, folder);
+    } catch (error) {
+        console.error('Upload error:', error);
+        return null;
+    }
 }
 
 
@@ -78,7 +74,7 @@ export async function acceptComplaint(prevState: unknown, formData: FormData) {
     const original_doc_file = formData.get('original_doc_file') as File;
     let original_doc_path = null;
     if (original_doc_file && original_doc_file.size > 0) {
-        original_doc_path = await uploadFile(original_doc_file);
+        original_doc_path = await uploadFile(original_doc_file, 'complaints/official_docs');
     }
 
     try {
@@ -170,11 +166,11 @@ export async function createManualComplaint(prevState: unknown, formData: FormDa
     const evidence_files = formData.getAll('evidence_files') as File[];
 
     try {
-        const original_doc_path = await uploadFile(original_doc_file);
+        const original_doc_path = await uploadFile(original_doc_file, 'complaints/official_docs');
 
         const evidencePaths: string[] = [];
         for (const file of evidence_files) {
-            const path = await uploadFile(file);
+            const path = await uploadFile(file, 'complaints/evidence');
             if (path) evidencePaths.push(path);
         }
 
@@ -267,7 +263,7 @@ export async function updateComplaint(id: number, formData: FormData) {
         ];
 
         if (original_doc_file && original_doc_file.size > 0) {
-            const original_doc_path = await uploadFile(original_doc_file);
+            const original_doc_path = await uploadFile(original_doc_file, 'complaints/official_docs');
             updateSql += `, original_doc_path = ? `;
             params.push(original_doc_path);
         }
@@ -284,7 +280,7 @@ export async function updateComplaint(id: number, formData: FormData) {
 
             for (const file of evidence_files) {
                 if (file.size > 0) {
-                    const path = await uploadFile(file);
+                    const path = await uploadFile(file, 'complaints/evidence');
                     if (path) existingFiles.push(path);
                 }
             }
@@ -391,7 +387,7 @@ export async function saveInvestigationResults(prevState: unknown, formData: For
 
         if (responseLetterFile && responseLetterFile.size > 0) {
             try {
-                responseLetterPath = await uploadFile(responseLetterFile);
+                responseLetterPath = await uploadFile(responseLetterFile, 'investigation/response_docs');
             } catch (uploadError) {
                 console.error('Upload failed (responseLetter):', uploadError);
                 // On Vercel, this fails. We might want to continue without file or throw?
@@ -402,7 +398,7 @@ export async function saveInvestigationResults(prevState: unknown, formData: For
 
         if (actionEvidenceFile && actionEvidenceFile.size > 0) {
             try {
-                actionEvidencePath = await uploadFile(actionEvidenceFile);
+                actionEvidencePath = await uploadFile(actionEvidenceFile, 'investigation/evidence');
             } catch (uploadError) {
                 console.error('Upload failed (actionEvidence):', uploadError);
                 throw new Error('Upload failed: File system is read-only (Vercel limitation). Please configure Vercel Blob.');
