@@ -14,9 +14,9 @@ export default function Home() {
             <div className="size-20 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shadow-sm mb-2">
               <span className="material-symbols-outlined text-[48px]">health_and_safety</span>
             </div>
-            <h1 className="text-4xl lg:text-5xl font-black text-text-main leading-tight tracking-tight">
-              ศูนย์รับเรื่องร้องเรียน<br />
-              <span className="text-primary">งานคุ้มครองผู้บริโภคฯ</span>
+            <h1 className="text-3xl lg:text-5xl font-black text-text-main leading-tight tracking-tight max-w-4xl">
+              ศูนย์จัดการเรื่องร้องเรียน<br className="hidden md:block" />
+              <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">ด้านผลิตภัณฑ์และบริการสุขภาพ</span>
             </h1>
             <p className="text-text-secondary text-lg max-w-xl">
               สำนักงานสาธารณสุขจังหวัดสมุทรปราการ พร้อมดูแลและคุ้มครองสิทธิของผู้บริโภค เพื่อสุขภาพและความปลอดภัยของประชาชน
