@@ -72,8 +72,8 @@ export async function submitComplaint(prevState: ActionState, formData: FormData
         await query(`
       INSERT INTO complaints 
       (complainant_name, id_card, phone, product_name, fda_number, shop_name, location, date_incident, damage_value, details, status, evidence_files,
-       wants_official_letter, official_letter_method, official_letter_email, official_letter_address)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'PENDING', ?, ?, ?, ?, ?)
+       wants_official_letter, official_letter_method, official_letter_email, official_letter_address, channel)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'PENDING', ?, ?, ?, ?, ?, 'ONLINE')
     `, [
             data.name,
             data.idCard,

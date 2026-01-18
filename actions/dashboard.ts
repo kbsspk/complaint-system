@@ -61,6 +61,7 @@ export async function getMonthlyComplaintStats(endDateStr?: string): Promise<Mon
             WHERE 
                 DATE_FORMAT(COALESCE(received_date, created_at), '%Y-%m') >= ? 
                 AND DATE_FORMAT(COALESCE(received_date, created_at), '%Y-%m') <= ?
+                AND status != 'REJECTED'
             GROUP BY month
             ORDER BY month ASC
         `;
@@ -133,6 +134,7 @@ export async function getMonthlyActStats(endDateStr?: string): Promise<MonthlyAc
             WHERE 
                 DATE_FORMAT(COALESCE(received_date, created_at), '%Y-%m') >= ? 
                 AND DATE_FORMAT(COALESCE(received_date, created_at), '%Y-%m') <= ?
+                AND status != 'REJECTED'
         `;
 
         const rows = await query<{ month: string; related_acts: string | null }[]>(sql, [startKey, endKey]);
@@ -213,6 +215,7 @@ export async function getMonthlyDistrictStats(endDateStr?: string): Promise<Mont
             WHERE 
                 DATE_FORMAT(COALESCE(received_date, created_at), '%Y-%m') >= ? 
                 AND DATE_FORMAT(COALESCE(received_date, created_at), '%Y-%m') <= ?
+                AND status != 'REJECTED'
             GROUP BY month, district
         `;
 
@@ -276,26 +279,20 @@ export async function getMonthlyChannelStats(endDateStr?: string): Promise<Month
             WHERE 
                 DATE_FORMAT(COALESCE(received_date, created_at), '%Y-%m') >= ? 
                 AND DATE_FORMAT(COALESCE(received_date, created_at), '%Y-%m') <= ?
+                AND status != 'REJECTED'
             GROUP BY month, channel
         `;
 
         const rows = await query<{ month: string; channel: string; count: number | string }[]>(sql, [startKey, endKey]);
 
-        // Map ENUM to Thai
-        const channelMap: Record<string, string> = {
-            'ONLINE': 'ออนไลน์',
-            'PHONE': 'โทรศัพท์',
-            'LETTER': 'หนังสือราชการ',
-            'WALK_IN': 'Walk-in'
-        };
-
         for (const row of rows) {
             const { month, channel, count } = row;
             if (statsMap.has(month) && channel) {
                 const entry = statsMap.get(month)!;
-                const label = channelMap[channel] || channel;
-                const current = (entry[label] as number) || 0;
-                entry[label] = current + Number(count);
+                // Use raw channel key (e.g. 'ONLINE')
+                // The client component handles translation to Thai
+                const current = (entry[channel] as number) || 0;
+                entry[channel] = current + Number(count);
             }
         }
 

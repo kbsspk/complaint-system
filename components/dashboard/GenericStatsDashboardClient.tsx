@@ -30,32 +30,30 @@ export default function GenericStatsDashboardClient({
     channelStats?: MonthlyChannelStats[];
     title?: string;
 }) {
-    // 1. Determine active data source
-    const data = districtStats || channelStats || [];
+    // 1. Constants
+    const ALL_DISTRICTS = [
+        'เมืองสมุทรปราการ',
+        'บางบ่อ',
+        'บางพลี',
+        'พระประแดง',
+        'พระสมุทรเจดีย์',
+        'บางเสาธง'
+    ];
+
+    const ALL_CHANNELS = [
+        'ONLINE',
+        'PHONE',
+        'LETTER',
+        'WALK_IN'
+    ];
+
+    // 2. Determine active keys based on prop type
     const isChannel = !!channelStats;
+    const allKeys = isChannel ? ALL_CHANNELS : ALL_DISTRICTS;
+    const data = districtStats || channelStats || [];
 
-    // 2. Extract all unique keys (Districts or Channels)
-    const allKeys = useMemo(() => {
-        const keys = new Set<string>();
-        data.forEach(item => {
-            Object.keys(item).forEach(k => {
-                if (k !== 'month') {
-                    keys.add(k);
-                }
-            });
-        });
-        return Array.from(keys).sort();
-    }, [data]);
-
-    // 3. State for selection
-    const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
-
-    // Initialize selection when keys change
-    useEffect(() => {
-        if (allKeys.length > 0) {
-            setSelectedKeys(allKeys);
-        }
-    }, [allKeys]);
+    // 3. State for selection (Default to allKeys)
+    const [selectedKeys, setSelectedKeys] = useState<string[]>(allKeys);
 
     // 4. Color Palette
     const COLORS = [
@@ -71,7 +69,11 @@ export default function GenericStatsDashboardClient({
         if (selectedKeys.includes(key)) {
             setSelectedKeys(prev => prev.filter(k => k !== key));
         } else {
-            setSelectedKeys(prev => [...prev, key]);
+            // Sort to keep order consistent
+            setSelectedKeys(prev => {
+                const newKeys = [...prev, key];
+                return allKeys.filter(k => newKeys.includes(k));
+            });
         }
     };
 
@@ -94,12 +96,41 @@ export default function GenericStatsDashboardClient({
         return `${months[mIndex]} ${shortYear}`;
     };
 
-    // Collapse logic for filter if too many items
-    const [isFilterExpanded, setIsFilterExpanded] = useState(true);
+    const formatFullMonth = (tick: string) => {
+        if (!tick) return '';
+        const months = [
+            'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
+            'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
+        ];
+        const [year, month] = tick.split('-');
+        const mIndex = parseInt(month, 10) - 1;
+        const thaiYear = parseInt(year, 10) + 543;
+        return `${months[mIndex]} ${thaiYear}`;
+    };
 
-    if (!data || data.length === 0) {
-        return <div className="p-8 text-center text-gray-400">ไม่มีข้อมูล</div>;
-    }
+    const getDisplayName = (key: string) => {
+        if (!isChannel) return key;
+        switch (key) {
+            case 'ONLINE': return 'ออนไลน์';
+            case 'PHONE': return 'โทรศัพท์';
+            case 'LETTER': return 'หนังสือราชการ';
+            case 'WALK_IN': return 'Walk-in';
+            default: return key;
+        }
+    };
+
+    // Calculate Table Totals
+    const columnTotals: Record<string, number> = {};
+    let grandTotal = 0;
+
+    selectedKeys.forEach(key => {
+        const sum = data.reduce((acc, row) => acc + ((row[key] as number) || 0), 0);
+        columnTotals[key] = sum;
+        grandTotal += sum;
+    });
+
+    // Collapse logic for filter if too many items (only relevant for districts maybe?)
+    const [isFilterExpanded, setIsFilterExpanded] = useState(true);
 
     return (
         <div className="space-y-6">
@@ -130,7 +161,7 @@ export default function GenericStatsDashboardClient({
                 </div>
 
                 {isFilterExpanded && (
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                    <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
                         {allKeys.map((key, index) => (
                             <label key={key} className="flex items-center space-x-2 cursor-pointer select-none hover:bg-gray-50 p-1 rounded">
                                 <div
@@ -152,13 +183,8 @@ export default function GenericStatsDashboardClient({
                                     onChange={() => handleToggle(key)}
                                     className="hidden" // Custom checkbox
                                 />
-                                <span className="text-sm text-gray-700 truncate" title={key}>
-                                    {isChannel ? (
-                                        key === 'ONLINE' ? 'ออนไลน์' :
-                                            key === 'PHONE' ? 'โทรศัพท์' :
-                                                key === 'LETTER' ? 'หนังสือราชการ' :
-                                                    key === 'WALK_IN' ? 'Walk-in' : key
-                                    ) : key}
+                                <span className="text-sm text-gray-700 truncate" title={getDisplayName(key)}>
+                                    {getDisplayName(key)}
                                 </span>
                             </label>
                         ))}
@@ -209,29 +235,18 @@ export default function GenericStatsDashboardClient({
                             labelFormatter={(label) => formatMonth(label)}
                             formatter={(value: any, name: any) => [
                                 value,
-                                isChannel ? (
-                                    name === 'ONLINE' ? 'ออนไลน์' :
-                                        name === 'PHONE' ? 'โทรศัพท์' :
-                                            name === 'LETTER' ? 'หนังสือราชการ' :
-                                                name === 'WALK_IN' ? 'Walk-in' : name
-                                ) : name
+                                getDisplayName(name)
                             ]}
                         />
                         <Legend wrapperStyle={{ paddingTop: '20px' }} />
 
-                        {selectedKeys.map((key, index) => {
-                            // Find original index from allKey to keep consistent color even if filtered
+                        {selectedKeys.map((key) => {
                             const colorIndex = allKeys.indexOf(key);
                             return (
                                 <Bar
                                     key={key}
                                     dataKey={key}
-                                    name={isChannel ? (
-                                        key === 'ONLINE' ? 'ออนไลน์' :
-                                            key === 'PHONE' ? 'โทรศัพท์' :
-                                                key === 'LETTER' ? 'หนังสือราชการ' :
-                                                    key === 'WALK_IN' ? 'Walk-in' : key
-                                    ) : key}
+                                    name={getDisplayName(key)}
                                     stackId="a"
                                     fill={getColor(colorIndex)}
                                     radius={[0, 0, 0, 0]}
@@ -241,6 +256,67 @@ export default function GenericStatsDashboardClient({
                         })}
                     </BarChart>
                 </ResponsiveContainer>
+            </div>
+
+            {/* Table Section */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div className="p-6 border-b border-gray-100">
+                    <h3 className="text-lg font-bold text-gray-800">ตารางสรุป{title}</h3>
+                </div>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-sm text-center">
+                        <thead>
+                            <tr className="bg-gray-50 text-gray-600 font-semibold border-b border-gray-200">
+                                <th className="px-4 py-3 text-left">เดือน / ปี</th>
+                                {selectedKeys.map(key => (
+                                    <th key={key} className="px-4 py-3 min-w-[100px] whitespace-nowrap">
+                                        {getDisplayName(key)}
+                                    </th>
+                                ))}
+                                <th className="px-4 py-3 text-gray-800 bg-gray-100">รวม</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-100">
+                            {data && data.length > 0 ? (
+                                data.map((row) => {
+                                    const rowTotal = selectedKeys.reduce((sum, key) => sum + ((row[key] as number) || 0), 0);
+                                    return (
+                                        <tr key={row.month} className="hover:bg-gray-50/50 transition-colors">
+                                            <td className="px-4 py-3 text-left font-medium text-gray-700 whitespace-nowrap">
+                                                {formatFullMonth(row.month)}
+                                            </td>
+                                            {selectedKeys.map(key => (
+                                                <td key={key} className="px-4 py-3 text-gray-600">
+                                                    {((row[key] as number) || 0).toLocaleString()}
+                                                </td>
+                                            ))}
+                                            <td className="px-4 py-3 font-semibold text-gray-800 bg-gray-50/30">
+                                                {rowTotal.toLocaleString()}
+                                            </td>
+                                        </tr>
+                                    );
+                                })
+                            ) : (
+                                <tr>
+                                    <td colSpan={selectedKeys.length + 2} className="px-4 py-8 text-center text-gray-400">
+                                        ไม่มีข้อมูล
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                        <tfoot className="bg-gray-100 font-bold border-t-2 border-gray-200">
+                            <tr>
+                                <td className="px-4 py-3 text-left">รวมทั้งหมด (12 เดือน)</td>
+                                {selectedKeys.map(key => (
+                                    <td key={key} className="px-4 py-3">
+                                        {columnTotals[key]?.toLocaleString() || 0}
+                                    </td>
+                                ))}
+                                <td className="px-4 py-3 text-gray-900">{grandTotal.toLocaleString()}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
         </div>
     );

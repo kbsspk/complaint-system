@@ -11,7 +11,11 @@ const initialState = {
     errors: null,
 };
 
-export default function ComplaintForm() {
+interface ComplaintFormProps {
+    onOpenPrivacyPolicy?: () => void;
+}
+
+export default function ComplaintForm({ onOpenPrivacyPolicy }: ComplaintFormProps) {
     const [state, formAction, isPending] = useActionState(submitComplaint, initialState);
     const [previewUrls, setPreviewUrls] = useState<string[]>([]);
     const [fileNameString, setFileNameString] = useState('');
@@ -271,7 +275,7 @@ export default function ComplaintForm() {
                         </span>
                     </div>
                     <span className="text-sm text-text-secondary select-none">
-                        ข้าพเจ้ายอมรับ <a href="#" className="text-primary font-bold hover:underline">นโยบายความเป็นส่วนตัว</a> และยืนยันว่าข้อมูลข้างต้นเป็นความจริง
+                        ข้าพเจ้ายอมรับ <button type="button" onClick={onOpenPrivacyPolicy} className="text-primary font-bold hover:underline">นโยบายความเป็นส่วนตัว</button> และยืนยันว่าข้อมูลข้างต้นเป็นความจริง
                     </span>
                 </label>
                 {state.errors?.acceptTerms && <span className="text-red-500 text-xs">{state.errors.acceptTerms[0]}</span>}

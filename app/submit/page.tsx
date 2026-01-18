@@ -1,9 +1,14 @@
+"use client";
+
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ComplaintForm from '@/components/ComplaintForm';
 import Link from 'next/link';
+import { useState } from 'react';
+import PrivacyPolicyModal from '@/components/PrivacyPolicyModal';
 
 export default function SubmitComplaintPage() {
+    const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
     return (
         <>
             <Header />
@@ -20,7 +25,10 @@ export default function SubmitComplaintPage() {
                         </div>
                         <h1 className="text-3xl lg:text-4xl font-black leading-tight tracking-[-0.033em] text-text-main">แจ้งเรื่องร้องเรียน</h1>
                         <p className="text-text-secondary text-base font-normal leading-normal max-w-2xl">
-                            โปรดกรอกข้อมูลให้ครบถ้วนเพื่อความรวดเร็วในการดำเนินการตรวจสอบ ข้อมูลของท่านจะถูกเก็บเป็นความลับตามนโยบายคุ้มครองข้อมูลส่วนบุคคล (PDPA)
+                            โปรดกรอกข้อมูลให้ครบถ้วนเพื่อความรวดเร็วในการดำเนินการตรวจสอบ ข้อมูลของท่านจะถูกเก็บเป็นความลับตาม
+                            <button onClick={() => setIsPrivacyOpen(true)} className="text-primary hover:underline font-medium ml-1 inline">
+                                นโยบายคุ้มครองข้อมูลส่วนบุคคล (PDPA)
+                            </button>
                         </p>
                     </div>
 
@@ -37,19 +45,20 @@ export default function SubmitComplaintPage() {
                                 </p>
                             </div>
                         </div>
-                        <a href="#" className="whitespace-nowrap text-sm font-bold text-primary hover:text-primary-dark flex items-center gap-1 group">
-                            อ่านขั้นตอนการร้องเรียน
+                        <a href="https://spko.my.canva.site/chc" target="_blank" className="whitespace-nowrap text-sm font-bold text-primary hover:text-primary-dark flex items-center gap-1 group">
+                            อ่านคู่มือการร้องเรียน
                             <span className="material-symbols-outlined text-[18px] transition-transform group-hover:translate-x-1">arrow_forward</span>
                         </a>
                     </div>
 
                     {/* Form Container */}
-                    <ComplaintForm />
+                    <ComplaintForm onOpenPrivacyPolicy={() => setIsPrivacyOpen(true)} />
 
                 </div>
             </main>
 
             <Footer />
+            <PrivacyPolicyModal isOpen={isPrivacyOpen} onClose={() => setIsPrivacyOpen(false)} />
         </>
     );
 }

@@ -11,25 +11,24 @@ export default function Footer() {
                     </div>
                     <p className="text-text-secondary text-sm leading-relaxed">
                         สำนักงานสาธารณสุขจังหวัดสมุทรปราการ<br />
-                        1029 หมู่ 2 ถนนท้ายบ้าน ตำบลปากน้ำ อำเภอเมือง จังหวัดสมุทรปราการ 10270
+                        เลขที่ 19 ซอย 35 อัศวนนท์ 2 ถนนสุขุมวิท ตำบลปากน้ำ อำเภอเมือง จังหวัดสมุทรปราการ 10270
                     </p>
                 </div>
                 <div className="flex flex-wrap gap-8 md:gap-16">
-                    <div className="flex flex-col gap-3">
-                        <h4 className="text-text-main font-bold text-sm">เมนูลัด</h4>
-                        <a href="#" className="text-text-secondary hover:text-primary text-sm">หน้าแรก</a>
-                        <a href="#" className="text-text-secondary hover:text-primary text-sm">ตรวจสอบเลข อย.</a>
-                        <a href="#" className="text-text-secondary hover:text-primary text-sm">บทความสุขภาพ</a>
-                    </div>
+
                     <div className="flex flex-col gap-3">
                         <h4 className="text-text-main font-bold text-sm">ติดต่อเรา</h4>
-                        <a href="#" className="text-text-secondary hover:text-primary text-sm flex items-center gap-2">
+                        <a href="tel:023895980" className="text-text-secondary hover:text-primary text-sm flex items-center gap-2">
                             <span className="material-symbols-outlined text-[16px]">call</span>
-                            02-384-0094
+                            0 2389 5980
                         </a>
-                        <a href="#" className="text-text-secondary hover:text-primary text-sm flex items-center gap-2">
+                        <a href="mailto:kbs.spko@gmail.com" className="text-text-secondary hover:text-primary text-sm flex items-center gap-2">
                             <span className="material-symbols-outlined text-[16px]">mail</span>
-                            consumer.sp@gmail.com
+                            kbs.spko@gmail.com
+                        </a>
+                        <a href="https://line.me/R/ti/p/@FDA11" target="_blank" className="text-text-secondary hover:text-primary text-sm flex items-center gap-2">
+                            <span className="material-symbols-outlined text-[16px]">chat</span>
+                            Line Official: @FDA11
                         </a>
                     </div>
                 </div>

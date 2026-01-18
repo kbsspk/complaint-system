@@ -15,10 +15,10 @@ export default function Header() {
 
             <div className="hidden lg:flex flex-1 justify-end gap-8 items-center">
                 <nav className="flex items-center gap-6">
-                    <Link href="/" className="text-text-main hover:text-primary transition-colors text-sm font-medium leading-normal">หน้าแรก</Link>
-                    <a href="#" className="text-text-main hover:text-primary transition-colors text-sm font-medium leading-normal">ข่าวประชาสัมพันธ์</a>
-                    <Link href="/submit" className="text-primary text-sm font-bold leading-normal">แจ้งเรื่องร้องเรียน</Link>
-                    <a href="#" className="text-text-main hover:text-primary transition-colors text-sm font-medium leading-normal">ติดต่อเรา</a>
+                    <Link href="/" className="text-text-main hover:text-primary transition-colors text-sm font-medium leading-normal">หน้าหลัก</Link>
+                    <Link href="/submit" className="text-text-main hover:text-primary transition-colors text-sm font-medium leading-normal">แจ้งเรื่องร้องเรียน</Link>
+                    <Link href="/track" className="text-text-main hover:text-primary transition-colors text-sm font-medium leading-normal">ติดตามเรื่องร้องเรียน</Link>
+                    <a href="https://spko.my.canva.site/chc" target="_blank" className="text-text-main hover:text-primary transition-colors text-sm font-medium leading-normal">คู่มือการร้องเรียน</a>
                 </nav>
                 <Link href="/login" className="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary hover:bg-primary-dark transition-colors text-white text-sm font-bold leading-normal tracking-[0.015em] shadow-sm">
                     <span className="truncate">เข้าสู่ระบบ</span>
