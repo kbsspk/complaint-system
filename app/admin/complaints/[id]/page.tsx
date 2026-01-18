@@ -2,7 +2,7 @@ import { query } from '@/lib/db';
 import { format } from 'date-fns';
 import { th } from 'date-fns/locale';
 import Link from 'next/link';
-import Image from 'next/image';
+
 import { notFound } from 'next/navigation';
 import ComplaintEditButton from '@/components/admin/ComplaintEditButton';
 
@@ -225,22 +225,20 @@ export default async function ComplaintDetailPage({ params }: { params: Promise<
                         <div className="mt-6 pt-6 border-t border-border-light">
                             <h3 className="text-base font-bold text-gray-800 mb-4">หลักฐานประกอบ ({evidenceFiles.length})</h3>
                             {evidenceFiles.length > 0 ? (
-                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                                <div className="flex flex-wrap gap-3">
                                     {evidenceFiles.map((file, idx) => (
-                                        <a key={idx} href={file} target="_blank" rel="noopener noreferrer" className="group relative aspect-square rounded-lg border border-border-light overflow-hidden bg-gray-100 flex items-center justify-center">
-                                            {file.toLowerCase().endsWith('.pdf') ? (
-                                                <div className="flex flex-col items-center text-red-500">
-                                                    <span className="material-symbols-outlined text-4xl">picture_as_pdf</span>
-                                                    <span className="text-xs font-bold mt-1">PDF File</span>
-                                                </div>
-                                            ) : (
-                                                <Image
-                                                    src={file}
-                                                    alt="evidence"
-                                                    fill
-                                                    className="object-cover transition-transform group-hover:scale-105"
-                                                />
-                                            )}
+                                        <a
+                                            key={idx}
+                                            href={file}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="inline-flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-lg text-blue-600 text-sm font-medium hover:bg-blue-50 hover:border-blue-200 transition-colors shadow-sm"
+                                        >
+                                            <span className="material-symbols-outlined text-[20px]">
+                                                {file.toLowerCase().endsWith('.pdf') ? 'picture_as_pdf' : 'image'}
+                                            </span>
+                                            <span>หลักฐาน #{idx + 1}</span>
+                                            <span className="material-symbols-outlined text-[16px] text-gray-400">open_in_new</span>
                                         </a>
                                     ))}
                                 </div>
