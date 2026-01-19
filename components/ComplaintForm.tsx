@@ -191,8 +191,8 @@ export default function ComplaintForm({ onOpenPrivacyPolicy }: ComplaintFormProp
                         <input name="shopName" className="w-full rounded-lg border border-border-light bg-background-light text-text-main focus:ring-primary focus:border-primary h-12 px-4 placeholder:text-gray-400 focus:outline-none focus:ring-2" placeholder="เช่น ร้านยากอไก่..." type="text" />
                     </label>
                     <label className="flex flex-col gap-2 md:col-span-2">
-                        <span className="text-sm font-medium text-text-main">สถานที่ตั้ง (ระบุที่ตั้งร้านพอสังเขป)</span>
-                        <input name="location" className="w-full rounded-lg border border-border-light bg-background-light text-text-main focus:ring-primary focus:border-primary h-12 px-4 placeholder:text-gray-400 focus:outline-none focus:ring-2" placeholder="" type="text" />
+                        <span className="text-sm font-medium text-text-main">สถานที่ตั้ง/แหล่งที่พบ/ช่องทางที่พบ (ระบุตำแหน่งที่ตั้งพอสังเขป หรือ ลิงค์ที่พบ เพื่อให้เจ้าหน้าที่สามารถเข้าตรวจสอบได้) <span className="text-red-500">*</span></span>
+                        <input name="location" className="w-full rounded-lg border border-border-light bg-background-light text-text-main focus:ring-primary focus:border-primary h-12 px-4 placeholder:text-gray-400 focus:outline-none focus:ring-2" placeholder="" type="text" required />
                     </label>
                 </div>
             </div>
@@ -266,21 +266,23 @@ export default function ComplaintForm({ onOpenPrivacyPolicy }: ComplaintFormProp
             </div>
 
             {/* Action Footer */}
-            <div className="bg-gray-50 dark:bg-[#1a2c28] p-6 lg:p-8 border-t border-border-light flex flex-col md:flex-row items-center justify-between gap-6">
-                <label className="flex items-start gap-3 cursor-pointer">
-                    <div className="relative flex items-center mt-0.5">
-                        <input name="acceptTerms" className="peer size-5 cursor-pointer appearance-none rounded border border-gray-300 bg-white checked:border-primary checked:bg-primary focus:ring-0" type="checkbox" />
-                        <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 peer-checked:opacity-100">
-                            <span className="material-symbols-outlined text-[16px]">check</span>
+            <div className="bg-gray-50 dark:bg-[#1a2c28] p-6 lg:p-8 border-t border-border-light flex flex-col gap-6">
+                <div>
+                    <label className="flex items-start gap-3 cursor-pointer">
+                        <div className="relative flex items-center mt-0.5">
+                            <input name="acceptTerms" className="peer size-5 cursor-pointer appearance-none rounded border border-gray-300 bg-white checked:border-primary checked:bg-primary focus:ring-0" type="checkbox" />
+                            <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 peer-checked:opacity-100">
+                                <span className="material-symbols-outlined text-[16px]">check</span>
+                            </span>
+                        </div>
+                        <span className="text-base text-text-secondary select-none">
+                            ข้าพเจ้ายอมรับ <button type="button" onClick={onOpenPrivacyPolicy} className="text-primary font-bold hover:underline">นโยบายความเป็นส่วนตัว</button> และรับรองว่าข้อเท็จจริงที่ได้ยื่นร้องเรียนต่อสำนักงานสาธารณสุขจังหวัดสมุทรปราการเป็นเรื่องที่เกิดขึ้นจริงทั้งหมด และขอรับผิดชอบต่อข้อเท็จจริงดังกล่าวข้างต้นทุกประการ ทั้งนี้ ข้าพเจ้ารับทราบว่าการนำความเท็จมาร้องเรียนต่อเจ้าหน้าที่ ซึ่งทำให้ผู้อื่นได้รับความเสียหายอาจเป็นความผิดฐานแจ้งความเท็จต่อเจ้าพนักงานตามประมวลกฎหมายอาญา
                         </span>
-                    </div>
-                    <span className="text-sm text-text-secondary select-none">
-                        ข้าพเจ้ายอมรับ <button type="button" onClick={onOpenPrivacyPolicy} className="text-primary font-bold hover:underline">นโยบายความเป็นส่วนตัว</button> และยืนยันว่าข้อมูลข้างต้นเป็นความจริง
-                    </span>
-                </label>
-                {state.errors?.acceptTerms && <span className="text-red-500 text-xs">{state.errors.acceptTerms[0]}</span>}
+                    </label>
+                    {state.errors?.acceptTerms && <p className="text-red-500 text-xs mt-2 ml-8">{state.errors.acceptTerms[0]}</p>}
+                </div>
 
-                <div className="flex gap-4 w-full md:w-auto">
+                <div className="flex gap-4 w-full md:w-auto md:self-end">
                     <button type="button" className="flex-1 md:flex-none px-6 py-3 rounded-lg border border-border-light bg-white text-text-main font-bold text-sm hover:bg-gray-50 transition-colors">
                         ยกเลิก
                     </button>

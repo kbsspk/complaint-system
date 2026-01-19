@@ -242,8 +242,8 @@ export default function ManualComplaintForm({ onClose, onSuccess }: ManualCompla
                                 <input name="shopName" className="w-full border rounded p-2" placeholder="เช่น ร้านยากอไก่..." />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">สถานที่ตั้ง (ระบุที่ตั้งร้านพอสังเขป)</label>
-                                <input name="location" className="w-full border rounded p-2" />
+                                <label className="block text-sm font-medium text-gray-700 mb-1">สถานที่ตั้ง/แหล่งที่พบ/ช่องทางที่พบ (ระบุตำแหน่งที่ตั้งพอสังเขป หรือ ลิงค์ที่พบ เพื่อให้เจ้าหน้าที่สามารถเข้าตรวจสอบได้) *</label>
+                                <input name="location" className="w-full border rounded p-2" required />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">วันที่เกิดเหตุ</label>

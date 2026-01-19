@@ -22,7 +22,7 @@ export default function UsersPage() {
 
     return (
         <div className="p-8 max-w-2xl">
-            <h1 className="text-2xl font-bold text-gray-800 mb-8">จัดการเจ้าหน้าที่</h1>
+            <h1 className="text-2xl font-bold text-gray-800 mb-8">จัดการบัญชีผู้ใช้</h1>
 
             <div className="bg-white p-6 rounded-xl shadow-sm border border-border-light">
                 <h2 className="text-lg font-bold text-text-main mb-4">สร้างบัญชีผู้ใช้งานใหม่</h2>

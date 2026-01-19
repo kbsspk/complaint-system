@@ -10,7 +10,7 @@ export default function AdminSidebar({ user }: { user: SessionPayload }) {
 
     const links = [
         { href: '/admin/dashboard', label: 'รายการร้องเรียน', icon: 'list_alt' },
-        ...(user.role === 'ADMIN' ? [{ href: '/admin/users', label: 'จัดการเจ้าหน้าที่', icon: 'group' }] : []),
+        ...(user.role === 'ADMIN' ? [{ href: '/admin/users', label: 'จัดการบัญชีผู้ใช้', icon: 'group' }] : []),
         { href: '/admin/dashboard/stats', label: 'สรุปการดำเนินการ', icon: 'bar_chart' },
     ];
 
