@@ -168,13 +168,28 @@ export async function createManualComplaint(prevState: unknown, formData: FormDa
     const evidence_files = formData.getAll('evidence_files') as File[];
 
     try {
-        const original_doc_path = await uploadFile(original_doc_file, 'complaints/official_docs');
+        console.log('Starting Manual Complaint Creation...');
+        console.log('Original Doc File Size:', original_doc_file?.size || 0);
+        console.log('Evidence Files Count:', evidence_files.length);
 
-        const evidencePaths: string[] = [];
-        for (const file of evidence_files) {
-            const path = await uploadFile(file, 'complaints/evidence');
-            if (path) evidencePaths.push(path);
+        let original_doc_path = null;
+        if (original_doc_file && original_doc_file.size > 0) {
+            console.log('Uploading Original Doc...');
+            original_doc_path = await uploadFile(original_doc_file, 'complaints/official_docs');
+            console.log('Original Doc Uploaded:', original_doc_path);
         }
+
+        console.log('Uploading Evidence Files...');
+        const uploadPromises = evidence_files.map(async (file) => {
+            if (file.size > 0) {
+                return await uploadFile(file, 'complaints/evidence');
+            }
+            return null;
+        });
+
+        const evidencePathsRaw = await Promise.all(uploadPromises);
+        const evidencePaths = evidencePathsRaw.filter((path): path is string => path !== null);
+        console.log('Evidence Files Uploaded:', evidencePaths.length);
 
         await query(`
             INSERT INTO complaints(
