@@ -192,8 +192,8 @@ export default function EditComplaintModal({ complaint, onClose, onSuccess }: Ed
                                 <input name="idCard" maxLength={13} defaultValue={complaint.id_card} className="w-full border rounded p-2" />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">เบอร์โทรศัพท์ *</label>
-                                <input name="phone" defaultValue={complaint.phone} className="w-full border rounded p-2" required />
+                                <label className="block text-sm font-medium text-gray-700 mb-1">เบอร์โทรศัพท์</label>
+                                <input name="phone" defaultValue={complaint.phone} className="w-full border rounded p-2" />
                             </div>
                         </div>
 
