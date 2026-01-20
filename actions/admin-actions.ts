@@ -185,12 +185,12 @@ export async function createManualComplaint(prevState: unknown, formData: FormDa
         ) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'IN_PROGRESS', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `, [
             name, idCard, phone, officialLetterEmail || email, officialLetterAddress || address, // Prioritize explicit official letter fields
-            productName, shopName, location, dateIncident, damageValue, details,
+            productName, shopName, location, dateIncident || null, damageValue, details,
             JSON.stringify(evidencePaths),
-            complaint_number, received_date, original_doc_number, original_doc_date,
+            complaint_number, received_date, original_doc_number, original_doc_date || null,
             channel, type, district, JSON.stringify(related_acts), responsible_person_id || null, original_doc_path,
             wantsOfficialLetter, officialLetterDeliveryMethod || null,
-            formData.get('is_safety_health_related') === 'true'
+            isSafetyHealthRelated
         ]);
 
         revalidatePath('/admin/dashboard');

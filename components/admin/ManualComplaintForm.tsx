@@ -124,6 +124,14 @@ export default function ManualComplaintForm({ onClose, onSuccess }: ManualCompla
                                 ))}
                             </div>
                         </div>
+
+                        <div>
+                            <label className="flex items-center space-x-2 text-sm font-medium text-red-600 mb-4 bg-red-50 p-2 rounded border border-red-100">
+                                <input type="checkbox" name="is_safety_health_related" className="rounded text-red-600 focus:ring-red-500" />
+                                <span>เป็นเรื่องที่มีผลต่อความปลอดภัยหรือสุขภาพร้ายแรง</span>
+                            </label>
+                        </div>
+
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">ผู้รับผิดชอบ</label>
                             <select name="responsible_person_id" className="w-full border rounded p-2 text-gray-500">
@@ -149,8 +157,8 @@ export default function ManualComplaintForm({ onClose, onSuccess }: ManualCompla
                                 <input name="idCard" maxLength={13} className="w-full border rounded p-2" />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">เบอร์โทรศัพท์ *</label>
-                                <input name="phone" className="w-full border rounded p-2" required />
+                                <label className="block text-sm font-medium text-gray-700 mb-1">เบอร์โทรศัพท์</label>
+                                <input name="phone" className="w-full border rounded p-2" />
                             </div>
                         </div>
 
