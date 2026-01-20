@@ -161,6 +161,8 @@ export async function createManualComplaint(prevState: unknown, formData: FormDa
     const officialLetterEmail = formData.get('officialLetterEmail') as string;
     const officialLetterAddress = formData.get('officialLetterAddress') as string;
 
+    const isSafetyHealthRelated = formData.get('is_safety_health_related') === 'on';
+
     // Files
     const original_doc_file = formData.get('original_doc_file') as File;
     const evidence_files = formData.getAll('evidence_files') as File[];
