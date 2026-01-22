@@ -104,12 +104,12 @@ export default function TrackPage() {
                                             <span className="size-2 rounded-full bg-current"></span>
                                             {item.status === 'RESOLVED' ? 'ดำเนินการแล้ว' :
                                                 item.status === 'IN_PROGRESS' ? 'อยู่ระหว่างดำเนินการ' :
-                                                    item.status === 'REJECTED' ? 'ปฏิเสธรับเรื่อง' :
+                                                    item.status === 'REJECTED' ? 'ถูกคืนเรื่อง' :
                                                         'รอการตรวจสอบ'}
                                         </span>
                                         {item.status === 'REJECTED' && item.rejection_reason && (
                                             <div className="text-right max-w-xs">
-                                                <span className="text-xs text-red-600 font-medium block">เหตุผล:</span>
+                                                <span className="text-xs text-red-600 font-medium block">เหตุผลการคืนเรื่อง:</span>
                                                 <span className="text-xs text-red-500">{item.rejection_reason}</span>
                                             </div>
                                         )}

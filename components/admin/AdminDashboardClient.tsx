@@ -182,7 +182,7 @@ export default function AdminDashboardClient({ complaints, role }: { complaints:
                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                         }`}
                 >
-                    ปฏิเสธ (Rejected)
+                    คืนเรื่อง (Returned)
                 </button>
             </div>
 
@@ -283,7 +283,7 @@ export default function AdminDashboardClient({ complaints, role }: { complaints:
                                                     return (
                                                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                                                             <span className="size-1.5 rounded-full bg-current mr-1.5"></span>
-                                                            ถูกปฏิเสธ
+                                                            ถูกคืนเรื่อง
                                                         </span>
                                                     );
                                                 }
@@ -322,7 +322,7 @@ export default function AdminDashboardClient({ complaints, role }: { complaints:
                                                         onClick={() => handleRejectClick(complaint)}
                                                         className="text-xs px-3 py-1.5 rounded border border-red-200 text-red-600 hover:bg-red-50"
                                                     >
-                                                        ปฏิเสธ
+                                                        คืนเรื่อง
                                                     </button>
                                                     <button
                                                         onClick={() => handleAcceptClick(complaint)}

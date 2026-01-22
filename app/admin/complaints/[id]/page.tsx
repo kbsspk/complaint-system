@@ -70,7 +70,7 @@ export default async function ComplaintDetailPage({ params }: { params: Promise<
                             return (
                                 <span className="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-bold bg-red-100 text-red-800">
                                     <span className="size-2.5 rounded-full bg-current mr-2"></span>
-                                    ถูกปฏิเสธ
+                                    ถูกคืนเรื่อง
                                 </span>
                             );
                         }
@@ -115,7 +115,7 @@ export default async function ComplaintDetailPage({ params }: { params: Promise<
                     {/* Rejection Reason */}
                     {complaint.status === 'REJECTED' && (
                         <div className="bg-red-50 rounded-xl shadow-sm border border-red-200 p-6">
-                            <h2 className="text-lg font-bold text-red-800 mb-2">เหตุผลการปฏิเสธ</h2>
+                            <h2 className="text-lg font-bold text-red-800 mb-2">เหตุผลการคืนเรื่อง</h2>
                             <p className="text-red-700">{complaint.rejection_reason}</p>
                         </div>
                     )}
