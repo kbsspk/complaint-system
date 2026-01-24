@@ -53,14 +53,14 @@ export async function getMonthlyComplaintStats(endDateStr?: string): Promise<Mon
 
         const sql = `
             SELECT 
-                DATE_FORMAT(COALESCE(received_date, created_at), '%Y-%m') as month,
+                DATE_FORMAT(DATE_ADD(received_date, INTERVAL 7 HOUR), '%Y-%m') as month,
                 SUM(CASE WHEN status = 'RESOLVED' THEN 1 ELSE 0 END) as completed,
                 SUM(CASE WHEN status = 'IN_PROGRESS' AND investigation_date IS NOT NULL THEN 1 ELSE 0 END) as inspected,
                 SUM(CASE WHEN status = 'PENDING' OR (status = 'IN_PROGRESS' AND investigation_date IS NULL) THEN 1 ELSE 0 END) as pending
             FROM complaints
             WHERE 
-                DATE_FORMAT(COALESCE(received_date, created_at), '%Y-%m') >= ? 
-                AND DATE_FORMAT(COALESCE(received_date, created_at), '%Y-%m') <= ?
+                DATE_FORMAT(DATE_ADD(received_date, INTERVAL 7 HOUR), '%Y-%m') >= ? 
+                AND DATE_FORMAT(DATE_ADD(received_date, INTERVAL 7 HOUR), '%Y-%m') <= ?
                 AND status != 'REJECTED'
             GROUP BY month
             ORDER BY month ASC
@@ -128,12 +128,12 @@ export async function getMonthlyActStats(endDateStr?: string): Promise<MonthlyAc
         // Fetch all complaints in range (id, received_date/created_at, related_acts)
         const sql = `
             SELECT 
-                DATE_FORMAT(COALESCE(received_date, created_at), '%Y-%m') as month,
+                DATE_FORMAT(DATE_ADD(received_date, INTERVAL 7 HOUR), '%Y-%m') as month,
                 related_acts
             FROM complaints
             WHERE 
-                DATE_FORMAT(COALESCE(received_date, created_at), '%Y-%m') >= ? 
-                AND DATE_FORMAT(COALESCE(received_date, created_at), '%Y-%m') <= ?
+                DATE_FORMAT(DATE_ADD(received_date, INTERVAL 7 HOUR), '%Y-%m') >= ? 
+                AND DATE_FORMAT(DATE_ADD(received_date, INTERVAL 7 HOUR), '%Y-%m') <= ?
                 AND status != 'REJECTED'
         `;
 
@@ -208,13 +208,13 @@ export async function getMonthlyDistrictStats(endDateStr?: string): Promise<Mont
 
         const sql = `
             SELECT 
-                DATE_FORMAT(COALESCE(received_date, created_at), '%Y-%m') as month,
+                DATE_FORMAT(DATE_ADD(received_date, INTERVAL 7 HOUR), '%Y-%m') as month,
                 district,
                 COUNT(*) as count
             FROM complaints
             WHERE 
-                DATE_FORMAT(COALESCE(received_date, created_at), '%Y-%m') >= ? 
-                AND DATE_FORMAT(COALESCE(received_date, created_at), '%Y-%m') <= ?
+                DATE_FORMAT(DATE_ADD(received_date, INTERVAL 7 HOUR), '%Y-%m') >= ? 
+                AND DATE_FORMAT(DATE_ADD(received_date, INTERVAL 7 HOUR), '%Y-%m') <= ?
                 AND status != 'REJECTED'
             GROUP BY month, district
         `;
@@ -272,13 +272,13 @@ export async function getMonthlyChannelStats(endDateStr?: string): Promise<Month
 
         const sql = `
             SELECT 
-                DATE_FORMAT(COALESCE(received_date, created_at), '%Y-%m') as month,
+                DATE_FORMAT(DATE_ADD(received_date, INTERVAL 7 HOUR), '%Y-%m') as month,
                 channel,
                 COUNT(*) as count
             FROM complaints
             WHERE 
-                DATE_FORMAT(COALESCE(received_date, created_at), '%Y-%m') >= ? 
-                AND DATE_FORMAT(COALESCE(received_date, created_at), '%Y-%m') <= ?
+                DATE_FORMAT(DATE_ADD(received_date, INTERVAL 7 HOUR), '%Y-%m') >= ? 
+                AND DATE_FORMAT(DATE_ADD(received_date, INTERVAL 7 HOUR), '%Y-%m') <= ?
                 AND status != 'REJECTED'
             GROUP BY month, channel
         `;
@@ -308,6 +308,10 @@ export type MonthlySafetyStats = {
     month: string;
     safety_related: number;
     others: number;
+    // Status breakdown for safety related
+    safety_pending: number;
+    safety_inspected: number;
+    safety_completed: number;
 };
 
 export async function getMonthlySafetyStats(endDateStr?: string): Promise<MonthlySafetyStats[]> {
@@ -331,7 +335,14 @@ export async function getMonthlySafetyStats(endDateStr?: string): Promise<Monthl
             while (m < 0) { m += 12; y -= 1; }
             const key = `${y}-${String(m + 1).padStart(2, '0')}`;
             monthKeys.unshift(key);
-            statsMap.set(key, { month: key, safety_related: 0, others: 0 });
+            statsMap.set(key, {
+                month: key,
+                safety_related: 0,
+                others: 0,
+                safety_pending: 0,
+                safety_inspected: 0,
+                safety_completed: 0
+            });
         }
 
         const startKey = monthKeys[0];
@@ -339,24 +350,47 @@ export async function getMonthlySafetyStats(endDateStr?: string): Promise<Monthl
 
         const sql = `
             SELECT 
-                DATE_FORMAT(COALESCE(received_date, created_at), '%Y-%m') as month,
+                DATE_FORMAT(DATE_ADD(received_date, INTERVAL 7 HOUR), '%Y-%m') as month,
                 SUM(CASE WHEN is_safety_health_related = TRUE THEN 1 ELSE 0 END) as safety_count,
-                 SUM(CASE WHEN is_safety_health_related = FALSE OR is_safety_health_related IS NULL THEN 1 ELSE 0 END) as other_count
+                 SUM(CASE WHEN is_safety_health_related = FALSE OR is_safety_health_related IS NULL THEN 1 ELSE 0 END) as other_count,
+                SUM(CASE 
+                    WHEN is_safety_health_related = TRUE AND status = 'RESOLVED' THEN 1 
+                    ELSE 0 
+                END) as safety_completed,
+                SUM(CASE 
+                    WHEN is_safety_health_related = TRUE AND status = 'IN_PROGRESS' AND investigation_date IS NOT NULL THEN 1 
+                    ELSE 0 
+                END) as safety_inspected,
+                SUM(CASE 
+                    WHEN is_safety_health_related = TRUE AND (status = 'PENDING' OR (status = 'IN_PROGRESS' AND investigation_date IS NULL)) THEN 1 
+                    ELSE 0 
+                END) as safety_pending
             FROM complaints
             WHERE 
-                DATE_FORMAT(COALESCE(received_date, created_at), '%Y-%m') >= ? 
-                AND DATE_FORMAT(COALESCE(received_date, created_at), '%Y-%m') <= ?
+                DATE_FORMAT(DATE_ADD(received_date, INTERVAL 7 HOUR), '%Y-%m') >= ? 
+                AND DATE_FORMAT(DATE_ADD(received_date, INTERVAL 7 HOUR), '%Y-%m') <= ?
+                AND status != 'REJECTED'
             GROUP BY month
         `;
 
-        const rows = await query<{ month: string; safety_count: number | string; other_count: number | string }[]>(sql, [startKey, endKey]);
+        const rows = await query<{
+            month: string;
+            safety_count: number | string;
+            other_count: number | string;
+            safety_completed: number | string;
+            safety_inspected: number | string;
+            safety_pending: number | string;
+        }[]>(sql, [startKey, endKey]);
 
         for (const row of rows) {
-            const { month, safety_count, other_count } = row;
+            const { month, safety_count, other_count, safety_completed, safety_inspected, safety_pending } = row;
             if (statsMap.has(month)) {
                 const entry = statsMap.get(month)!;
                 entry.safety_related = Number(safety_count);
                 entry.others = Number(other_count);
+                entry.safety_completed = Number(safety_completed);
+                entry.safety_inspected = Number(safety_inspected);
+                entry.safety_pending = Number(safety_pending);
             }
         }
 
@@ -365,7 +399,6 @@ export async function getMonthlySafetyStats(endDateStr?: string): Promise<Monthl
         console.error('Failed to fetch safety stats:', error);
         return [];
     }
-
 }
 
 export type MonthlyFineStats = {
@@ -408,13 +441,13 @@ export async function getMonthlyFineStats(
         // Base SQL
         let sql = `
             SELECT 
-                DATE_FORMAT(f.created_at, '%Y-%m') as month,
+                DATE_FORMAT(DATE_ADD(f.created_at, INTERVAL 7 HOUR), '%Y-%m') as month,
                 SUM(f.amount) as total,
                 COUNT(f.id) as count
             FROM investigation_fines f
             WHERE 
-                DATE_FORMAT(f.created_at, '%Y-%m') >= ? 
-                AND DATE_FORMAT(f.created_at, '%Y-%m') <= ?
+                DATE_FORMAT(DATE_ADD(f.created_at, INTERVAL 7 HOUR), '%Y-%m') >= ? 
+                AND DATE_FORMAT(DATE_ADD(f.created_at, INTERVAL 7 HOUR), '%Y-%m') <= ?
         `;
 
         const params: (string | number)[] = [startKey, endKey];
@@ -531,8 +564,8 @@ export async function getOfficerPerformanceStats(endDateStr?: string): Promise<O
             FROM complaints c
             JOIN users u ON c.responsible_person_id = u.id
             WHERE 
-                DATE_FORMAT(COALESCE(c.received_date, c.created_at), '%Y-%m') >= ? 
-                AND DATE_FORMAT(COALESCE(c.received_date, c.created_at), '%Y-%m') <= ?
+                DATE_FORMAT(DATE_ADD(c.received_date, INTERVAL 7 HOUR), '%Y-%m') >= ? 
+                AND DATE_FORMAT(DATE_ADD(c.received_date, INTERVAL 7 HOUR), '%Y-%m') <= ?
                 AND c.status != 'REJECTED'
             GROUP BY u.id, u.full_name, u.username
             ORDER BY avgDays DESC
@@ -584,7 +617,7 @@ export async function getGroupPerformanceStats(timeRange: 'ALL' | '12_MONTHS'): 
             const oneYearAgo = new Date();
             oneYearAgo.setFullYear(now.getFullYear() - 1);
 
-            sql += ` AND (COALESCE(received_date, created_at) >= ?)`;
+            sql += ` AND (DATE_ADD(received_date, INTERVAL 7 HOUR) >= ?)`;
             params.push(oneYearAgo.toISOString().split('T')[0]); // YYYY-MM-DD
         }
 
