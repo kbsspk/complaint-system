@@ -330,6 +330,36 @@ export const ComplaintPdf = ({ complaint }: { complaint: Complaint }) => {
                             )}
                         </View>
                     </View>
+
+                    {/* 7. Official Section */}
+                    <View style={{ padding: 10, borderTop: '1px solid #000', paddingBottom: 20 }}>
+                        <Text style={{ marginTop: 5, marginLeft: 20, fontSize: 16 }}>เรียน นายแพทย์สาธารณสุขจังหวัดสมุทรปราการ</Text>
+
+                        <View style={{ flexDirection: 'row', alignItems: 'flex-end', marginTop: 15, marginLeft: 20 }}>
+                            <Text style={{ fontSize: 16 }}>ดำเนินการ</Text>
+                            <View style={{ borderBottom: '1px dotted #000', flex: 1, marginLeft: 5 }} />
+                        </View>
+                        <View style={{ borderBottom: '1px dotted #000', height: 20, marginTop: 5, marginLeft: 20 }} />
+
+                        <View style={{ alignItems: 'flex-end', marginTop: 20, marginRight: 20 }}>
+                            <View style={{ width: 250, alignItems: 'center' }}>
+                                <View style={{ flexDirection: 'row', alignItems: 'flex-end', width: '100%' }}>
+                                    <Text style={{ marginRight: 5, fontSize: 16 }}>ลงชื่อ</Text>
+                                    <View style={{ borderBottom: '1px dotted #000', flex: 1 }} />
+                                </View>
+                                <View style={{ flexDirection: 'row', alignItems: 'flex-end', width: '100%', marginTop: 5 }}>
+                                    <Text style={{ fontSize: 16 }}>(</Text>
+                                    <View style={{ borderBottom: '1px dotted #000', flex: 1, marginHorizontal: 5 }} />
+                                    <Text style={{ fontSize: 16 }}>)</Text>
+                                </View>
+                                <Text style={{ marginTop: 5, fontSize: 16 }}>หัวหน้ากลุ่มงานคุ้มครองผู้บริโภค</Text>
+                                <View style={{ flexDirection: 'row', alignItems: 'flex-end', width: '100%', marginTop: 5 }}>
+                                    <Text style={{ marginRight: 5, fontSize: 16 }}>วันที่</Text>
+                                    <View style={{ borderBottom: '1px dotted #000', flex: 1 }} />
+                                </View>
+                            </View>
+                        </View>
+                    </View>
                 </View>
             </Page>
 
